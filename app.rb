@@ -128,27 +128,26 @@ post '/project/:id/invite' do
 	response.to_json
 end
 
+delete '/invite/:id' do
+	invite = Invite.find_by({id: params[:id]})
+	if invite
+		Invite.destroy(invite)
+	end
+	redirect '/'
+end
+
 ## CRUD ROUTES FOR COLLAB
 
 post '/collab' do
-	request.body.rewind
-	invite_id = JSON.parse request.body.read
-	invite = Invite.find_by({id: invite_id["id"]})
+	invite = Invite.find_by({id: params[:invite_id]})
 	if invite
 		collab = Collab.create({
 			project_id: invite[:project_id],
 			user_id: invite[:user_id]
 			})
 		Invite.destroy(invite)
-		response = {
-			status: 'success'
-		}
-	else
-		response = {
-			status: 'invalid'
-		}
 	end
-	response.to_json
+	redirect '/'
 end
 
 ######

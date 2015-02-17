@@ -1,0 +1,22 @@
+{
+  "name": "final_proj2",
+  "version": "0.0.0",
+  "description": "",
+  "main": "socket.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aadeschamps/final_proj_sinatra.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/aadeschamps/final_proj_sinatra/issues"
+  },
+  "dependencies": {
+    "ws": "~0.7.1",
+    "sqlite3": "~3.0.5"
+  }
+}

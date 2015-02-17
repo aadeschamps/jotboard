@@ -15,7 +15,7 @@
 	</form>
 	<a href="/project/new">Create New Project</a>
 	<div class="dashboard">
-		<h2>Your Project</h2>
+		<h2>Your Projects</h2>
 		<ul id="boards">
 			<% @projects.each do |project| %>
 			<li><a href="/project/<%=project.id%>"><%=project.title %></a></li>
@@ -27,8 +27,17 @@
 			<% if @invites %>
 			<% @invites.each do |invite| %>
 				<li><%= invite.project.title %> by <%= invite.project.user.username %>
-				<button class='acceptBut' id='accept<%=invite.id%>'>Accept</button>
-				<button class='declineBut' id='decline<%=invite.id%>'>Decline</button></li>
+					<form action="/collab" method='POST'>
+						<input type="hidden" name='invite_id'value='<%=invite.id%>'>
+						<button>Accept</button>
+					</form>
+					<form action='/invite/<%=invite.id%>' method='POST'>
+						<input type="hidden" name='_method' value='DELETE'>
+						<input type="hidden" name='invite_id'value='<%=invite.id%>'>
+						<button>Decline</button>
+					</form>
+				<!-- <button class='acceptBut' id='accept<%=invite.id%>'>Accept</button> -->
+				<!-- <button class='declineBut' id='decline<%=invite.id%>'>Decline</button></li> -->
 			<% end %>
 			<% end %>
 		</ul>

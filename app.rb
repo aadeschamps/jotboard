@@ -6,12 +6,14 @@ require 'firebase_token_generator'
 require 'json'
 require_relative './models/connection'
 require_relative './models/users'
+require_relative './models/invites'
+require_relative './models/collabs'
+require_relative './models/projects'
 
 # will need to enable sessions to log people in
 enable :sessions
 
-
-# gets the index page
+# gets the index page with sign in
 get '/' do
 	erb :index
 end
@@ -58,18 +60,22 @@ end
 
 get '/dashboard' do
 	if session[:user_id]
+		@projects = Project.where({user_id: session[:user_id]})
 		erb :dashboard
 	else
 		redirect '/'
 	end 
 end
 
-get '/token' do
-	if session[:user_id]
-		user = User.find_by({id: session[:user_id]})
-		payload = {uid: user.id.to_s, username: user.username, debug: true, admin: true}
-		generator = Firebase::FirebaseTokenGenerator.new("2M5yxqWATqXQBqIlDqgwVQnJd0r3zyxA1sQELr1d")
-		token = generator.create_token(payload)
-		token.to_json
-	end
-end
+
+
+#### old project idea
+# get '/token' do
+# 	if session[:user_id]
+# 		user = User.find_by({id: session[:user_id]})
+# 		payload = {uid: user.id.to_s, username: user.username, debug: true, admin: true}
+# 		generator = Firebase::FirebaseTokenGenerator.new("2M5yxqWATqXQBqIlDqgwVQnJd0r3zyxA1sQELr1d")
+# 		token = generator.create_token(payload)
+# 		token.to_json
+# 	end
+# end

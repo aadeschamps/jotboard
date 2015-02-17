@@ -8,7 +8,8 @@ CREATE TABLE users (
 CREATE TABLE projects (
 	id INTEGER PRIMARY KEY,
 	title TEXT,
-	user_id INTEGER references users
+	user_id INTEGER references users,
+	keycode TEXT
 );
 
 CREATE TABLE invites (

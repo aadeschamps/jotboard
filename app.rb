@@ -59,6 +59,7 @@ post '/user' do
 end
 
 get '/dashboard' do
+	puts keyCodeGenerator()
 	if session[:user_id]
 		@projects = Project.where({user_id: session[:user_id]})
 		erb :dashboard
@@ -66,6 +67,48 @@ get '/dashboard' do
 		redirect '/'
 	end 
 end
+
+
+####
+#     CRUD routes for projects
+get '/project/:id' do
+	@project = Project.find_by({id: params[:id]})
+	erb :project
+end
+
+get '/project/new' do
+	erb :new_project
+end
+
+post '/project' do
+	project = {
+		user_id: session[:user_id],
+		keycode: keyCodeGenerator()
+	}
+end
+
+delete '/project/:id' do
+	Project.destroy(params[:id])
+	redirect '/dashboard'
+end
+
+####
+
+
+
+## Generates random key for each project
+def keyCodeGenerator()
+	alphabet = %w[a b c d e f g h i j k l m o p q r s t u v x y z]
+	keyCode = "" 
+	for i in (1..20)
+		num = rand(1..alphabet.length-1)
+		keyCode += alphabet[num]
+	end
+	return keyCode
+end
+
+keyCodeGenerator()
+
 
 
 

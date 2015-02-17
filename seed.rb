@@ -13,5 +13,6 @@ alex = User.create({
 
 Project.create({
 	user_id: alex.id,
-	title: 'This Project'
+	title: 'This Project',
+	keycode: 'abcdefg'
 	})

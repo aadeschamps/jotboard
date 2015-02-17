@@ -12,13 +12,13 @@
 	<h1> Here </h1>
 	<form action="/login" method='POST'>
 		<input type="hidden" name="_method" value="DELETE">
-		<button>Logout</button>
+		<a href="/new_project"></a>
 	</form>
 	<div class="dashboard">
 		<button id='create-board'>Create New Board</button>
 		<ul id="boards">
 			<% @projects.each do |project| %>
-			<li><%=project.title %></li>
+			<li><a href="/project/<%=project.id%>"><%=project.title %></a></li>
 			<% end %>
 		</ul>
 	</div>

@@ -16,7 +16,6 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.0)
     builder (3.2.2)
-    firebase_token_generator (2.0.0)
     i18n (0.7.0)
     json (1.8.2)
     minitest (5.5.1)
@@ -41,7 +40,6 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
-  firebase_token_generator
   json
   sinatra
   sinatra-activerecord

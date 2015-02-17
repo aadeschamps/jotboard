@@ -66,6 +66,8 @@ get '/dashboard' do
 	if session[:user_id]
 		@projects = Project.where({user_id: session[:user_id]})
 		@user = User.find_by({id: session[:user_id]})
+		@invites = Invite.where({user_id: session[:user_id]})
+		binding.pry
 		erb :dashboard
 	else
 		redirect '/'
@@ -104,6 +106,29 @@ end
 
 ####
 
+## CRUD ROUTES FOR INVITES
+
+post '/project/:id/invite' do
+	request.body.rewind
+	username = JSON.parse request.body.read
+	user = User.find_by({username: username["username"]})
+	if user
+		invite = {
+			user_id: user.id,
+			project_id: params[:id].to_i
+		}
+		Invite.create(invite)
+		response = {
+			status: 'success'
+		}
+	else
+		response = {
+			status: 'invalid'
+		}
+	end
+	binding.pry
+	response.to_json
+end
 
 
 ## Generates random key for each project

@@ -24,7 +24,13 @@
 		</ul>
 	</div>
 	<div class="board">
-		
+		<ul>
+			<% if @invites %>
+			<% @invites.each do |invite| %>
+				<li><%= invite.project.title %> by <%= invite.project.user.username %></li>
+			<% end %>
+			<% end %>
+		</ul>
 	</div>
 </body>
 </html>

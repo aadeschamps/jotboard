@@ -3,8 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<title><%=@project.title%></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </head>
 <body>
-	<h1>Here peeps</h1>
+	<div class="header">
+		<h1>Here peeps</h1>
+		<input id='inviteInput' type='text' placeholder='invite user'>
+		<input id='project_id' type="hidden" value="<%=@project.id%>">
+	</div>
+	 
+	 <script src='/project.js'></script>
 </body>
 </html>

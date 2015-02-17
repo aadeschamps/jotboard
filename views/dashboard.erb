@@ -9,13 +9,14 @@
 	<script src='main.js'></script>
 </head>
 <body>
-	<h1> Here </h1>
+	<h1> <%= @user.username %> </h1>
 	<form action="/login" method='POST'>
 		<input type="hidden" name="_method" value="DELETE">
-		<a href="/new_project"></a>
+		<button>Logout</button>
 	</form>
+	<a href="/project/new">Create New Project</a>
 	<div class="dashboard">
-		<button id='create-board'>Create New Board</button>
+		<h2>Your Project</h2>
 		<ul id="boards">
 			<% @projects.each do |project| %>
 			<li><a href="/project/<%=project.id%>"><%=project.title %></a></li>

@@ -2,7 +2,6 @@
 require 'sinatra'
 require 'pry'
 require 'sqlite3'
-require 'firebase_token_generator'
 require 'json'
 require_relative './models/connection'
 require_relative './models/users'
@@ -13,12 +12,16 @@ require_relative './models/projects'
 # will need to enable sessions to log people in
 enable :sessions
 
-# gets the index page with sign in
+
 get '/' do
-	erb :index
+	if session[:user_id]
+		redirect '/dashboard'
+	else
+		erb :index
+	end
 end
 
-# logs people in who have the right crudentials
+## CRUD routes for login/sessions
 post '/login' do
 	# finds user with the username given
 	user = User.find_by(username: params[:username])
@@ -37,12 +40,12 @@ delete '/login' do
 	redirect '/'
 end
 
-get '/signup' do
+## Sign up form
+get '/user/new' do
 	erb :signup
 end
 
 post '/user' do
-	binding.pry
 	if params[:password] === params[:confirm_password]
 		user = {
 			username: params[:username],
@@ -62,6 +65,7 @@ get '/dashboard' do
 	puts keyCodeGenerator()
 	if session[:user_id]
 		@projects = Project.where({user_id: session[:user_id]})
+		@user = User.find_by({id: session[:user_id]})
 		erb :dashboard
 	else
 		redirect '/'
@@ -71,20 +75,26 @@ end
 
 ####
 #     CRUD routes for projects
-get '/project/:id' do
-	@project = Project.find_by({id: params[:id]})
-	erb :project
-end
 
 get '/project/new' do
 	erb :new_project
 end
 
+get '/project/:id' do
+	@project = Project.find_by({id: params[:id]})
+	erb :project
+end
+
 post '/project' do
+	keycode = keyCodeGenerator()
 	project = {
+		title: params[:title],
 		user_id: session[:user_id],
-		keycode: keyCodeGenerator()
+		keycode: keycode
 	}
+	newProject = Project.create(project)
+	binding.pry
+	redirect '/dashboard'
 end
 
 delete '/project/:id' do
@@ -106,8 +116,6 @@ def keyCodeGenerator()
 	end
 	return keyCode
 end
-
-keyCodeGenerator()
 
 
 

@@ -67,7 +67,7 @@ get '/dashboard' do
 		@projects = Project.where({user_id: session[:user_id]})
 		@user = User.find_by({id: session[:user_id]})
 		@invites = Invite.where({user_id: session[:user_id]})
-		binding.pry
+		@collabs = Collab.where({user_id: session[:user_id]})
 		erb :dashboard
 	else
 		redirect '/'
@@ -95,7 +95,6 @@ post '/project' do
 		keycode: keycode
 	}
 	newProject = Project.create(project)
-	binding.pry
 	redirect '/dashboard'
 end
 
@@ -112,7 +111,7 @@ post '/project/:id/invite' do
 	request.body.rewind
 	username = JSON.parse request.body.read
 	user = User.find_by({username: username["username"]})
-	if user
+	if user && user.id != session[:user_id]
 		invite = {
 			user_id: user.id,
 			project_id: params[:id].to_i
@@ -126,9 +125,35 @@ post '/project/:id/invite' do
 			status: 'invalid'
 		}
 	end
-	binding.pry
 	response.to_json
 end
+
+## CRUD ROUTES FOR COLLAB
+
+post '/collab' do
+	request.body.rewind
+	invite_id = JSON.parse request.body.read
+	invite = Invite.find_by({id: invite_id["id"]})
+	if invite
+		collab = Collab.create({
+			project_id: invite[:project_id],
+			user_id: invite[:user_id]
+			})
+		Invite.destroy(invite)
+		response = {
+			status: 'success'
+		}
+	else
+		response = {
+			status: 'invalid'
+		}
+	end
+	response.to_json
+end
+
+######
+
+
 
 
 ## Generates random key for each project

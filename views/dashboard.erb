@@ -3,10 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Dashboard</title>
-	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="/css/main.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="https://cdn.firebase.com/js/client/2.2.0/firebase.js"></script>
-	<script src='main.js'></script>
+	<script src='/js/dashboard.js'></script>
 </head>
 <body>
 	<h1> <%= @user.username %> </h1>
@@ -27,8 +26,18 @@
 		<ul>
 			<% if @invites %>
 			<% @invites.each do |invite| %>
-				<li><%= invite.project.title %> by <%= invite.project.user.username %></li>
+				<li><%= invite.project.title %> by <%= invite.project.user.username %>
+				<button class='acceptBut' id='accept<%=invite.id%>'>Accept</button>
+				<button class='declineBut' id='decline<%=invite.id%>'>Decline</button></li>
 			<% end %>
+			<% end %>
+		</ul>
+	</div>
+	<div class="collabs">
+		<h2>Collaborations</h2>
+		<ul id='collabs'>
+			<% @collabs.each do |collab| %>
+				<li><a href="/project/<%=collab.project.id%>"><%=collab.project.title%></a></li>
 			<% end %>
 		</ul>
 	</div>

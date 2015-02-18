@@ -43,10 +43,10 @@ server.on("connection", function(connection){
 		// checks to see if its the first message
 		// the keycode is always the first thing that gets sent
 		if(!user.roomId){
+			user.roomId = true;
 			// gets the project id from the keycode
 			db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
 				if(err){throw err};
-				console.log(row);
 				user.roomId = row.id;
 				checkRoom(user, row.id);
 			});
@@ -73,13 +73,24 @@ function checkRoom(user, id){
 			users: [user],
 			history: []
 		};
+		user.conn.send(JSON.stringify({
+			type: 'history',
+			histore: local_db[id].history
+			})
+		)
 	}
+	// console.log('here');
 }
 
-function sendMessage(user, msg){
+function sendHistory(user){
+
+}
+
+function sendMessages(user, msg){
+	console.log('here');
 	room = local_db[user.roomId];
-	console.log(room);
 	room.users.forEach(function(elem){
+		console.log(elem);
 		elem.conn.send(msg);
 	});
 	room.history.push(msg);

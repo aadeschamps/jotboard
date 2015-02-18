@@ -90,12 +90,12 @@ get '/project/:id' do
 	@project = Project.find_by({id: params[:id]})
 	collabs = Collab.where({project_id: @project.id})
 	collaborator = false;
+	## security if someone who is not a collab or user
 	collabs.each do |collab|
 		if(collab[:user_id] == session[:user_id])
 			collaborator = true
 		end
 	end
-	binding.pry
 	if session[:user_id] == @project[:user_id] || collaborator
 		erb :project
 	else
@@ -104,6 +104,7 @@ get '/project/:id' do
 end
 
 post '/project' do
+	## only allows someone whos signed in to create
 	if session[:user_id]
 		keycode = keyCodeGenerator()
 		project = {
@@ -119,6 +120,7 @@ post '/project' do
 end
 
 delete '/project/:id' do
+	# only allows the user to delete own project
 	project = Project.find_by(params[:id])
 	if session[:user_id] == project[:user_id]
 		Project.destroy(params[:id])
@@ -138,7 +140,7 @@ post '/project/:id/invite' do
 	user = User.find_by({username: username["username"]})
 	invite = Invite.find_by({user_id: user.id, project_id: params[:id].to_i})
 	collab = Collab.find_by({user_id: user.id, project_id: params[:id].to_i})
-	binding.pry
+	# no duplicate invites or collabs
 	if user && user.id != session[:user_id] && !invite && !collab
 		invite = {
 			user_id: user.id,

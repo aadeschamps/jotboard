@@ -1,6 +1,7 @@
 
 $( 'document' ).ready( function() {
 
+	// sends invites to other users by username
 	$( '#inviteInput' ).keypress(function(e) {
 		var key = e.which;
 		if(key === 13){
@@ -15,4 +16,12 @@ $( 'document' ).ready( function() {
 			});
 		}
 	});
+
+	var ws = new WebSocket("ws://localhost:3000");
+	
+	ws.addEventListener('open', function(){
+		ws.send(key);
+	});
+
 });
+

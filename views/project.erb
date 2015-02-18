@@ -11,7 +11,13 @@
 		<input id='inviteInput' type='text' placeholder='invite user'>
 		<input id='project_id' type="hidden" value="<%=@project.id%>">
 	</div>
-	 
+
+
+	<script type='text/javascript'>
+	 	var key = "<%= @project.keycode %>";
+	 </script>
+
 	 <script src='/js/project.js'></script>
+
 </body>
 </html>

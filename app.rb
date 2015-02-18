@@ -23,10 +23,7 @@ end
 
 ## CRUD routes for login/sessions
 post '/login' do
-	# finds user with the username given
 	user = User.find_by(username: params[:username])
-	# sets the session[:user_id] if the user exists and
-	# the password matches the database
 	if user && user.password === params[:password]
 		session[:user_id] = user.id
 		redirect '/dashboard'
@@ -35,6 +32,7 @@ post '/login' do
 	end
 end
 
+## signs user out
 delete '/login' do
 	session[:user_id] = nil
 	redirect '/'
@@ -45,6 +43,7 @@ get '/user/new' do
 	erb :signup
 end
 
+## creates new user
 post '/user' do
 	if params[:password] === params[:confirm_password]
 		user = {
@@ -61,6 +60,7 @@ post '/user' do
 	end
 end
 
+# loads the main dashboard page
 get '/dashboard' do
 	puts keyCodeGenerator()
 	if session[:user_id]
@@ -79,28 +79,53 @@ end
 #     CRUD routes for projects
 
 get '/project/new' do
-	erb :new_project
+	if session[:user_id]
+		erb :new_project
+	else
+		redirect '/'
+	end
 end
 
 get '/project/:id' do
 	@project = Project.find_by({id: params[:id]})
-	erb :project
+	collabs = Collab.where({project_id: @project.id})
+	collaborator = false;
+	collabs.each do |collab|
+		if(collab[:user_id] == session[:user_id])
+			collaborator = true
+		end
+	end
+	binding.pry
+	if session[:user_id] == @project[:user_id] || collaborator
+		erb :project
+	else
+		redirect '/'
+	end
 end
 
 post '/project' do
-	keycode = keyCodeGenerator()
-	project = {
-		title: params[:title],
-		user_id: session[:user_id],
-		keycode: keycode
-	}
-	newProject = Project.create(project)
-	redirect '/dashboard'
+	if session[:user_id]
+		keycode = keyCodeGenerator()
+		project = {
+			title: params[:title],
+			user_id: session[:user_id],
+			keycode: keycode
+		}
+		newProject = Project.create(project)
+		redirect '/dashboard'
+	else
+		redirect '/'
+	end
 end
 
 delete '/project/:id' do
-	Project.destroy(params[:id])
-	redirect '/dashboard'
+	project = Project.find_by(params[:id])
+	if session[:user_id] == project[:user_id]
+		Project.destroy(params[:id])
+		redirect '/dashboard'
+	else
+		redirect '/'
+	end
 end
 
 ####
@@ -111,7 +136,10 @@ post '/project/:id/invite' do
 	request.body.rewind
 	username = JSON.parse request.body.read
 	user = User.find_by({username: username["username"]})
-	if user && user.id != session[:user_id]
+	invite = Invite.find_by({user_id: user.id, project_id: params[:id].to_i})
+	collab = Collab.find_by({user_id: user.id, project_id: params[:id].to_i})
+	binding.pry
+	if user && user.id != session[:user_id] && !invite && !collab
 		invite = {
 			user_id: user.id,
 			project_id: params[:id].to_i
@@ -130,24 +158,29 @@ end
 
 delete '/invite/:id' do
 	invite = Invite.find_by({id: params[:id]})
-	if invite
+	if invite && invite[:user_id] == session[:user_id]
 		Invite.destroy(invite)
+		redirect '/dashboard'
+	else
+		redirect '/'
 	end
-	redirect '/'
+	
 end
 
 ## CRUD ROUTES FOR COLLAB
 
 post '/collab' do
 	invite = Invite.find_by({id: params[:invite_id]})
-	if invite
+	if invite && invite[:user_id] == session[:user_id]
 		collab = Collab.create({
 			project_id: invite[:project_id],
 			user_id: invite[:user_id]
 			})
 		Invite.destroy(invite)
+		redirect '/dashboard'
+	else
+		redirect '/'
 	end
-	redirect '/'
 end
 
 ######
@@ -165,17 +198,3 @@ def keyCodeGenerator()
 	end
 	return keyCode
 end
-
-
-
-
-#### old project idea
-# get '/token' do
-# 	if session[:user_id]
-# 		user = User.find_by({id: session[:user_id]})
-# 		payload = {uid: user.id.to_s, username: user.username, debug: true, admin: true}
-# 		generator = Firebase::FirebaseTokenGenerator.new("2M5yxqWATqXQBqIlDqgwVQnJd0r3zyxA1sQELr1d")
-# 		token = generator.create_token(payload)
-# 		token.to_json
-# 	end
-# end

@@ -17,11 +17,22 @@ $( 'document' ).ready( function() {
 		}
 	});
 
+	
 	var ws = new WebSocket("ws://localhost:3000");
 	
 	ws.addEventListener('open', function(){
 		ws.send(key);
+		drawReady();
 	});
+
+
+	ws.addEventListener('message', function(evt){
+		console.log(evt);
+	});
+
+	var drawReady = function(){
+
+	};
 
 });
 

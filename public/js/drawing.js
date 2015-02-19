@@ -1,33 +1,10 @@
-// starts websocket connections
-ws = new WebSocket("ws://localhost:3000");
-
-// immediately sends key
-ws.addEventListener('open', function(){
-	ws.send(key);
-});
-
-receiving messages
-ws.addEventListener('message', function(evt){
-	msg = JSON.parse(evt.data)
-	if( msg.type === 'history'){
-		// console.log(msg);
-		msg.history.forEach(function(j_msg){
-			var pathing = JSON.parse(j_msg);;
-		})
-		// console.log(JSON.parse(msg.history));
-	}else if (msg.type  === 'packet'){
-	}
-});
-
 
 // allows for multiple users to draw at the 
 // --- same time
-var User = function(name){
-	this.name;
+var User = function(unique){
 	this.x = 0;
 	this.y = 0;
-	this.path = 0;
-	this.pathString = '';
+	this.unique = unique;
 
 	// sorts out what kind of message if sent
 	// -- and draws accordingly
@@ -36,6 +13,7 @@ var User = function(name){
 		// if type is start, draw a small point
 		// at that area and set this x and y
 		if(msg.type === 'start'){
+			console.log('here');
 			context.strokeStyle = "#df4b26";
   			context.lineJoin = "round";
   			context.lineWidth = 5;
@@ -98,7 +76,7 @@ window.onload = function(){
 
 function startDrawing(ctx){
 
-	var alex = new User('alex');
+	// var alex = new User('alex');
 
 	$('#canvas').mousedown(function(e){
 		drawing = true;
@@ -110,24 +88,71 @@ function startDrawing(ctx){
 			x: x,
 			y: y
 		};
-		alex.draw(msg, ctx);
+		ws.send(JSON.stringify(msg));
 	})
 
 	$('#canvas').mousemove(function(e){
-		if(!drawing){
-			return;
+		if(drawing){
+			var x = e.offsetX,
+				y = e.offsetY;
+			var msg = {
+				type: 'draw',
+				x: x,
+				y: y
+			};
+			ws.send(JSON.stringify(msg));
 		}
-		var x = e.offsetX,
-			y = e.offsetY;
-		var msg = {
-			type: 'draw',
-			x: x,
-			y: y
-		};
-		alex.draw(msg, ctx);
 	})
 
 	$(document).mouseup(function(e){
 		drawing = false;
 	})
+
+
+	// starts websocket connections
+	ws = new WebSocket("ws://localhost:3000");
+
+	// immediately sends key
+	ws.addEventListener('open', function(){
+		ws.send(key);
+	});
+
+	// receiving messages
+	ws.addEventListener('message', function(evt){
+		msg = JSON.parse(evt.data)
+		// console.log(msg);
+		if( msg.type === 'history'){
+			// console.log(msg);
+			msg.history.forEach(function(j_msg){
+				var pathing = JSON.parse(j_msg);;
+				var current_user = checkUsers(pathing);
+				current_user.draw(pathing, ctx)
+			})
+			// console.log(JSON.parse(msg.history));
+		}else{
+			var current_user = checkUsers(msg);
+			current_user.draw(msg,ctx);
+		}
+	});
 }
+
+
+
+function checkUsers(msg){
+	console.log(msg);
+	var exists = false;
+	var current_user;
+	users.forEach(function(user){
+		if(user.unique === msg.unique){
+			console.log('exists');
+			exists = true;
+			current_user = user;
+		}
+	});
+	// console.log(current_user);
+	if(!exists){
+		current_user = new User(msg.unique);
+		users.push(current_user);
+	}
+	return current_user;
+};

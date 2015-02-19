@@ -56,19 +56,35 @@ server.on("connection", function(connection){
 //------also sends down history of the room
 function checkRoom(user, id){
 	if (!!local_db[id]){
-		local_db[id].users.push(user);
+		var unique = 1;
+		var found = false;
+		for (var i = 0; i < local_db[id].users.length; i++) {
+			if( local_db[id].users[i].unique != unique){
+				user.unique = unique;
+				console.log('inside');
+				local_db[id].users.splice(i, 0, user);
+				found = true;
+				break;
+			}
+			unique++;
+		};
+		if(!found){
+			user.unique = unique
+			local_db[id].users.push(user);
+		}
 		user.conn.send(JSON.stringify({
 			type: 'history',
 			history: local_db[id].history
 		}));
 	}else{
+		user.unique = 1;
 		local_db[id] = {
 			users: [user],
 			history: []
 		};
 		user.conn.send(JSON.stringify({
 			type: 'history',
-			histore: local_db[id].history
+			history: local_db[id].history
 			})
 		)
 	}
@@ -77,11 +93,13 @@ function checkRoom(user, id){
 // looks up which room your in and sends
 // -- messages to all the users in it
 function sendMessages(user, msg){
-	console.log('here');
 	room = local_db[user.roomId];
+	var buffer = JSON.parse(msg);
+	buffer.unique = user.unique;
+	console.log(buffer);
+	var new_msg = JSON.stringify(buffer);
 	room.users.forEach(function(elem){
-		console.log(elem);
-		elem.conn.send(msg);
+		elem.conn.send(new_msg);
 	});
-	room.history.push(msg);
+	room.history.push(new_msg);
 }

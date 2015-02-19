@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="en">
 <head>
 	<link rel="stylesheet" href="/css/reset.css">
@@ -80,7 +80,7 @@
 			<% if @collabs %>
 			<% @collabs.each do |collab| %>
 				<!-- <a href="/project/<%=collab.project.id%>" class='btn btn-info col-md-3 col-xs-12 project' role='button'><%=collab.project.title%></a> -->
-				<a href="/project/<%=collab.id%>"><div class='col-md-4 col-xs-12 project'><%=collab.project.title %></div></a>
+				<a href="/project/<%=collab.project.id%>"><div class='col-md-4 col-xs-12 project'><%=collab.project.title %></div></a>
 			<% end %>
 			<% end %>
 			<% if @invites %>

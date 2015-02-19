@@ -16,7 +16,7 @@ var User = function(unique){
 			console.log('here');
 			context.strokeStyle = "#df4b26";
   			context.lineJoin = "round";
-  			context.lineWidth = 5;
+  			context.lineWidth = 10;
 			this.x = msg.x;
 			this.y = msg.y;
 			context.beginPath();

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<link rel="stylesheet" href="/css/reset.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
@@ -16,24 +17,22 @@
 </head>
 <body>
 	<div class="container">
-	<div class="row">
+	<div class="row header">
 	<div class="navbar col-md-12">
-		<h3 class="name inline">Final Project</h3>
-		<form class='inline pull-right vertical center' action="/login" method='POST'>
+		<h3 class="white name inline" id="project-title">JotBoard</h3>
+		<form class='inline pull-right logout-form' id='logout' action="/login" method='POST'>
 			<input type="hidden" name="_method" value="DELETE">
 			<button>Logout</button>
 		</form>
 	</div>
 	</div>
+	</div>
+	<div class="container">	
 	<div class="row">
-		<div class=" right-sidebar col-md-2 col-md-push-10">
-		<h3 class="right-sidebar-h3">Create New Project</h3>
-		<form action="/project" method='POST'>
-			<label for="title">Title: </label>
-			<input type="text" name='title'>
-		</form>
-		<h3 class="right-sidebar-h3"></h3>
-		<ul>
+		<!-- <div class=" right-sidebar col-md-2 col-md-push-10">
+		
+		<h3 class="right-sidebar-h3"></h3> -->
+		<!-- <ul>
 			<% if @invites %>
 			<% @invites.each do |invite| %>
 			<li><%= invite.project.title %> by <%= invite.project.user.username %>
@@ -48,9 +47,9 @@
 					</form>
 			<% end %>
 			<% end %>
-		</ul>
-		</div>
-	<div class="col-md-10 col-md-pull-2">
+		</ul> -->
+		<!-- </div> -->
+	<div class="col-md-12">
 	<h2 class="welcome">Welcome, <%= @user.username %></h2>
 	<div class="">
 		
@@ -58,8 +57,16 @@
 			<h3 class="titles">Your Projects</h3>
 			<div class="row">
 				<% @projects.each do |project| %>
-				<a href="/project/<%=project.id%>" class='btn btn-info col-md-3 col-xs-12 project' role='button'><%=project.title %></a>
+				<!-- <a href="/project/<%=project.id%>" class='btn btn-info col-md-3 col-xs-12 project' role='button'><%=project.title %></a> -->
+				<a href="/project/<%=project.id%>"><div class='col-md-4 col-xs-12 project'><%=project.title %></div></a>
 				<% end %>
+				<div class='col-md-4 col-xs-12 project'>
+					<h3 class=" white right-sidebar-h3">Create New Project</h3>
+		<form action="/project" method='POST'>
+			<label for="title" class='white'>Title: </label>
+			<input type="text" name='title'>
+		</form>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -69,8 +76,24 @@
 		<h3>Collaborations</h3>
 		<div class="row">
 			<% @collabs.each do |collab| %>
-				<a href="/project/<%=collab.project.id%>" class='btn btn-info col-md-3 col-xs-12 project' role='button'><%=collab.project.title%></a>
-			
+				<!-- <a href="/project/<%=collab.project.id%>" class='btn btn-info col-md-3 col-xs-12 project' role='button'><%=collab.project.title%></a> -->
+				<a href="/project/<%=collab.id%>"><div class='col-md-4 col-xs-12 project'><%=collab.project.title %></div></a>
+			<% end %>
+			<% if @invites %>
+			<% @invites.each do |invite| %>
+			<div class='col-md-4 col-xs-12 project'>
+				<%= invite.project.title %> by <%= invite.project.user.username %>
+					<form action="/collab" method='POST'>
+						<input type="hidden" name='invite_id'value='<%=invite.id%>'>
+						<button>Accept</button>
+					</form>
+					<form action='/invite/<%=invite.id%>' method='POST'>
+						<input type="hidden" name='_method' value='DELETE'>
+						<input type="hidden" name='invite_id'value='<%=invite.id%>'>
+						<button>Decline</button>
+					</form>
+			</div>
+			<% end %>
 			<% end %>
 		</div>
 	</div>

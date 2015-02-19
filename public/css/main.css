@@ -1,10 +1,33 @@
 h1{
-	color: black;
+	color: white;
+}
+
+.white{
+	color: white;
 }
 
 .header {
-	background-color: red;
+	background-color: #191919;
+	height: 60px;
 }
+
+a{
+	text-decoration: none;
+	color: white;
+}
+a:hover{
+	text-decoration: none;
+	color: white;
+}
+
+/*.logout-form{
+	height: 100%;
+}*/
+
+#logout{
+	margin-top: 15px;
+}
+
 .container{
 	overflow: hidden;
 }
@@ -14,9 +37,14 @@ h1{
 }
 
 .project {
-	margin: 20px;
 	height: 100px;
-	background-color: #636363;
+	/*background-color: #1919ff;*/
+	background-color: #7e7e7e;
+	border-radius: 5px;
+}
+
+.project:hover{
+	background-color: #3f3f3f;
 }
 
 .right-sidebar{
@@ -24,8 +52,4 @@ h1{
 	background-color: #5bc0de;
 }
 
-.center {
-    display: table-cell;
-    vertical-align: middle;
-    float: none;
-}
+

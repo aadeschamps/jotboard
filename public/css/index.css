@@ -1,3 +1,47 @@
+
+h1, p, label, button{
+	font-family: 'Permanent Marker', cursive;
+}
+
+input, label, p, button{
+	display: block;	
+	margin: 0 auto;
+}
+
+label, p, h1 {
+	text-align: center;
+}
+
 h1{
-	color: red;
+	font-size: 200%;
+	padding-top: 50px;
+	padding-bottom: 40px;
+}
+
+.main {
+	width: 80%;
+	max-width: 800px;
+	background-color: white;
+	margin: 0 auto;
+	margin-top: 40px;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-bottom: 7px solid black;
+}
+
+input {
+	border: solid 1px #dcdcdc;
+}
+
+p{
+	margin: 20px;
+}
+button{
+	margin-top: 20px;
+}
+
+#last-button{
+	margin-bottom: 20px;
 }

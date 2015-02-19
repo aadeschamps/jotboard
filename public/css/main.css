@@ -1,3 +1,31 @@
 h1{
-	color: red;
+	color: black;
+}
+
+.header {
+	background-color: red;
+}
+.container{
+	overflow: hidden;
+}
+
+.inline{
+	display: inline-block;
+}
+
+.project {
+	margin: 20px;
+	height: 100px;
+	background-color: #636363;
+}
+
+.right-sidebar{
+	border-radius: 5px;
+	background-color: #5bc0de;
+}
+
+.center {
+    display: table-cell;
+    vertical-align: middle;
+    float: none;
 }

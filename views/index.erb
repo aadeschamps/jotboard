@@ -1,17 +1,50 @@
-<link rel="stylesheet" href="/css/index.css">
-<script src='/js/index.js'></script>
-<h1>Welcome</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Sign In</title>
+	<link rel="stylesheet" href="/css/reset.css">
+	<!-- Latest compiled and minified CSS -->
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+ -->
+	<!-- Optional theme -->
+<!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> -->
 
+	<!-- Latest compiled and minified JavaScript -->
+	<link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
 
-<form action='/login' method='POST'>
+	<link rel="stylesheet" href="/css/index.css">
+	<script src='/js/index.js'></script>
+</head>
+<body>
+	<div class="main">
+	<div class="sign-in-main">
+		<h1 class='text-center'> Final Project </h1>
+		<!-- <div class="row"> -->
+		<form class='' action='/login' method='POST'>
+			<label for='username'>Username</label>
+			<input type="text" name='username'>
+			<label for="password">Password</label>
+			<input type="password" name='password'>
+			<button>Sign In</button>
+		</form>
+		</div>
 
-	<label for='username'>Username</label>
-	<input type="text" name='username'>
-	<label for="password">Password</label>
-	<input type="password" name='password'>
-	<button>Sign In</button>
-</form>
+		<p class="or">or</p>
 
-<p> or </p>
-
-<a href="/user/new"> Sign Up </a>
+		<div class="sign-up-main">
+		<form action="/user" method='POST'>
+			<label for="username">Username</label>
+			<input type="text" name='username'>
+			<label for="password">Password</label>
+			<input type="password" name='password'>
+			<label for="confirm_password">Confirm Password</label>
+			<input type="password" name='confirm_password'>
+			<label for="email">Email</label>
+			<input type="text" name='email'>
+			<button id='last-button'>Sign up!</button>
+		</form>
+		</div>
+	</div>
+</body>
+</html>

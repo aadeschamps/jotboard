@@ -1,28 +1,12 @@
 var WebSocketServer = require("ws").Server;
 var server = new WebSocketServer({port: 3000});
 var sqlite3 = require('sqlite3').verbose();
+
+// connects to same database that sinatra server
+// --- connects to
 var db = new sqlite3.Database("final_project.db");
 
 
-// var room = function(id){
-// 	this.id = id;
-// 	this.users = [];
-// 	this.history = [];
-
-// 	this.sendMessages = function(msg){
-// 		this.users.forEach(function(user){
-// 			user
-// 		})
-// 	};
-// 	this.enter = function(user){
-
-// 	};
-// 	this.leave = function(user){
-// 		index = this.users.indexOf(user);
-// 		this.users.splice(index,1);
-// 	};
-// };
-// var rooms = [];
 
 // the user object, will use roomId heavily
 var User = function(conn){
@@ -31,17 +15,20 @@ var User = function(conn){
 };
 
 
-// this will be a db hash used to control whos in what room
+// this will be a db hash used to control 
+// ---whos in what room
+// ------- I want to replace with mongoDb
 local_db = {};
 
 
-
+// What happens when connection 
 server.on("connection", function(connection){
 	console.log('connected');
 	var user = new User(connection);
+	// what happens when a message comes in
 	connection.on('message',function(message){
 		// checks to see if its the first message
-		// the keycode is always the first thing that gets sent
+		// ---the keycode is always the first thing that gets sent
 		if(!user.roomId){
 			user.roomId = true;
 			// gets the project id from the keycode
@@ -55,12 +42,18 @@ server.on("connection", function(connection){
 		}
 	});
 
+	// removes person from room when connection
+	// --- ends
 	connection.on('close', function(){
 		var index = local_db[user.roomId].users.indexOf(user);
 		local_db[user.roomId].users.splice(index,1);
 	});
 });
 
+
+// checks to see if room exists and makes
+// one if it doesnt
+//------also sends down history of the room
 function checkRoom(user, id){
 	if (!!local_db[id]){
 		local_db[id].users.push(user);
@@ -79,13 +72,10 @@ function checkRoom(user, id){
 			})
 		)
 	}
-	// console.log('here');
 }
 
-function sendHistory(user){
-
-}
-
+// looks up which room your in and sends
+// -- messages to all the users in it
 function sendMessages(user, msg){
 	console.log('here');
 	room = local_db[user.roomId];

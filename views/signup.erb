@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<link rel="stylesheet" href="reset.css">
+	<link rel="stylesheet" href="skeleton.css">
+	<link rel="stylesheet" href='splash.css'>
 	<meta charset="UTF-8">
 	<title>Document</title>
 </head>
 <body>
-	<form action="/user" method='POST'>
-	
-	<label for="username">Username</label>
-	<input type="text" name='username'>
-	<label for="password">Password</label>
-	<input type="password" name='password'>
-	<label for="confirm_password">Confirm Password</label>
-	<input type="password" name='confirm_password'>
-	<label for="email">Email</label>
-	<input type="text" name='email'>
-	<button>Sign up!</button>
+	<div class="container">
+		<form action="/user" method='POST'>	
+		<label for="username">Username</label>
+		<input type="text" name='username'>
+		<label for="password">Password</label>
+		<input type="password" name='password'>
+		<label for="confirm_password">Confirm Password</label>
+		<input type="password" name='confirm_password'>
+		<label for="email">Email</label>
+		<input type="text" name='email'>
+		<button>Sign up!</button>
+	</div>
 
 </form>
 </body>

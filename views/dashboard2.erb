@@ -16,13 +16,13 @@
 	<title>Dashboard</title>
 </head>
 <body>
-	<div class="container">
+	<div class="container-fluid">
 	<div class="row header">
 	<div class="navbar col-md-12">
 		<h3 class="white name inline" id="project-title">JotBoard</h3>
 		<form class='inline pull-right logout-form' id='logout' action="/login" method='POST'>
 			<input type="hidden" name="_method" value="DELETE">
-			<button>Logout</button>
+			<button class='btn'>Logout</button>
 		</form>
 	</div>
 	</div>
@@ -56,12 +56,14 @@
 		<div class="projects">
 			<h3 class="titles">Your Projects</h3>
 			<div class="row">
+				<% if @projects %>
 				<% @projects.each do |project| %>
 				<!-- <a href="/project/<%=project.id%>" class='btn btn-info col-md-3 col-xs-12 project' role='button'><%=project.title %></a> -->
 				<a href="/project/<%=project.id%>"><div class='col-md-4 col-xs-12 project'><%=project.title %></div></a>
 				<% end %>
+				<% end %>
 				<div class='col-md-4 col-xs-12 project'>
-					<h3 class=" white right-sidebar-h3">Create New Project</h3>
+					<h3 class="create-new white right-sidebar-h3">Create New Project</h3>
 		<form action="/project" method='POST'>
 			<label for="title" class='white'>Title: </label>
 			<input type="text" name='title'>
@@ -75,22 +77,24 @@
 	<div class="">
 		<h3>Collaborations</h3>
 		<div class="row">
+			<% if @collabs %>
 			<% @collabs.each do |collab| %>
 				<!-- <a href="/project/<%=collab.project.id%>" class='btn btn-info col-md-3 col-xs-12 project' role='button'><%=collab.project.title%></a> -->
 				<a href="/project/<%=collab.id%>"><div class='col-md-4 col-xs-12 project'><%=collab.project.title %></div></a>
 			<% end %>
+			<% end %>
 			<% if @invites %>
 			<% @invites.each do |invite| %>
 			<div class='col-md-4 col-xs-12 project'>
-				<%= invite.project.title %> by <%= invite.project.user.username %>
+				<p class='white'><%= invite.project.title %> by <%= invite.project.user.username %></p>
 					<form action="/collab" method='POST'>
 						<input type="hidden" name='invite_id'value='<%=invite.id%>'>
-						<button>Accept</button>
+						<button class='inline'>Accept</button>
 					</form>
-					<form action='/invite/<%=invite.id%>' method='POST'>
+					<form action='/invite/<%=invite.id%>' method='POST' >
 						<input type="hidden" name='_method' value='DELETE'>
-						<input type="hidden" name='invite_id'value='<%=invite.id%>'>
-						<button>Decline</button>
+						<input type="hidden" name='invite_id'value='<%=invite.id%>' class='inline'>
+						<button class='inline'>Decline</button>
 					</form>
 			</div>
 			<% end %>

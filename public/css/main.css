@@ -1,9 +1,18 @@
 h1{
 	color: white;
 }
+.create-new{
+	margin: 0;
+	margin-bottom: 5px;
+	/*line-height: 0;*/
+}
 
 .white{
 	color: white;
+}
+
+.inline{
+	display: inline-block;
 }
 
 .header {
@@ -25,7 +34,9 @@ a:hover{
 }*/
 
 #logout{
-	margin-top: 15px;
+	position: absolute;
+	top: 15px;
+	right: 10px;
 }
 
 .container{
@@ -38,9 +49,12 @@ a:hover{
 
 .project {
 	height: 100px;
+	padding: 20px;
+	min-height: 150px;
 	/*background-color: #1919ff;*/
 	background-color: #7e7e7e;
-	border-radius: 5px;
+	border: 10px solid white;
+	border-radius: 15px;
 }
 
 .project:hover{

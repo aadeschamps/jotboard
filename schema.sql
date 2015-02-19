@@ -23,5 +23,3 @@ CREATE TABLE collabs (
 	user_id references users,
 	project_id references projects
 );
-
-CREATE TABLE 

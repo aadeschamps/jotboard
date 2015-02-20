@@ -146,7 +146,6 @@ post '/project/:id/invite' do
 	invite = Invite.find_by({user_id: user.id, project_id: params[:id].to_i})
 	collab = Collab.find_by({user_id: user.id, project_id: params[:id].to_i})
 	# no duplicate invites or collabs
-	binding.pry
 	if user && user.id != session[:user_id] && !invite && !collab
 		invite = {
 			user_id: user.id,
@@ -156,7 +155,6 @@ post '/project/:id/invite' do
 		response = {
 			status: 'success'
 		}
-			binding.pry
 	else
 		response = {
 			status: 'invalid'

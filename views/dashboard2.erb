@@ -64,7 +64,6 @@
 			<% if @invites %>
 			<% @invites.each do |invite| %>
 			<div class='col-md-4 col-xs-12 project'>
-				<% binding.pry %>
 				<p class='white'><%= invite.project.title %> by <%= invite.project.user.username %></p>
 					<form action="/collab" method='POST'>
 						<input type="hidden" name='invite_id'value='<%=invite.id%>'>

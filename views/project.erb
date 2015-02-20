@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title><%=@project.title%></title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title><%=@project.title%></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="/css/project.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/project.css">
 </head>
 <body>
-	<div class="container-fluid">
-	<div id='header'class="navbar navbar-header">
-		<div class="title bar col-md-2">
-		<h4><%=@project.title%></h4>
-		</div>
-		<div class="input bar">
-		<input id='inviteInput' type='text' placeholder='invite user'>
-		</div>
-		<input id='project_id' type="hidden" value="<%=@project.id%>">
-		<div class="bar-tools bar">
-		<!-- <ul id="tools"> -->
-		<button id="eraser" class="tool">Eraser</button>
-		<button id="pen" class="tool">Pen</button>
-		<!-- </ul> -->
-		</div>
-	</div>
-	<div id="canvas-div"></div>
-	</div>
-	<script type='text/javascript'>
-	 	var key = "<%= @project.keycode %>";
-	 </script>
+    <div class="container-fluid">
 
-	 <script src='/js/drawing.js'></script>
+    <div id='header'class="navbar navbar-header">
+        <div class="title bar col-md-2">
+        <h4><%=@project.title%></h4>
+        </div>
+        <div class="input bar">
+        <input id='inviteInput' type='text' placeholder='invite user'>
+        </div>
+    </div>
+
+        <div class="btn-group-vertical side-nav" role="group" aria-label="vertical-group">
+            <button class="btn" id='eraser'> Eraser </button>
+         <!--    <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Pen <span class="caret"></span></button> -->
+            <!-- <ul class="dropdown-menu" role="menu"> -->
+                <!-- <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+              </ul> -->
+              <button class='btn color' id='black'>Black</button>
+              <button class='btn color' id='blue'>blue</button>
+              <button class='btn color' id='red'>Red</button>
+              <button class='btn color' id='green'>Green</button>
+              <button class='btn color' id='yellow'>Yellow</button>
+        </div>
+
+<!--         <input id='project_id' type="hidden" value="<%=@project.id%>">
+<div class="bar-tools bar"> -->
+        <!-- <ul id="tools"> -->
+    <!--     <button id="eraser" class="tool">Eraser</button>
+    <button id="pen" class="tool">Pen</button> -->
+        <!-- </ul> -->
+        </div>
+    </div>
+    <div id="canvas-div"></div>
+    </div>
+    <script type='text/javascript'>
+         var key = "<%= @project.keycode %>";
+     </script>
+
+     <script src='/js/drawing.js'></script>
 </body>
 </html>

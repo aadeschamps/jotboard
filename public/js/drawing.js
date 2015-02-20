@@ -65,8 +65,8 @@ window.onload = function(){
 
 	var canvas_div = document.getElementById('canvas-div');
 	var canvas = document.createElement('canvas');
-	canvas.setAttribute('width', window.innerWidth + 'px');
-	canvas.setAttribute('height', '100%');
+	canvas.setAttribute('width', '800px');
+	canvas.setAttribute('height', '800px');
 	canvas.setAttribute('id', 'canvas');
 	canvas_div.appendChild(canvas);
 	var context = canvas.getContext('2d');
@@ -87,6 +87,12 @@ function startDrawing(ctx, canvas){
 
 	$('#pen').click(function(evt){
 		color = 'blue';
+		stroke_size = 7;
+	})
+
+	$('.color').click(function(evt){
+		console.log($(this).attr('id'));
+		color = $(this).attr('id');
 		stroke_size = 7;
 	})
 

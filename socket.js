@@ -54,6 +54,7 @@ server.on("connection", function(connection){
 // checks to see if room exists and makes
 // one if it doesnt
 //------also sends down history of the room
+// -----added in unique id to each user
 function checkRoom(user, id){
 	if (!!local_db[id]){
 		var unique = 1;

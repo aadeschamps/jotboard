@@ -53,6 +53,7 @@ window.onload = function(){
 		if(key === 13){
 			var invitee = $('#inviteInput').val();
 			var project_id = $('#project_id').val();
+			console.log(project_id);
 			var inv = {
 				username: invitee,
 			};

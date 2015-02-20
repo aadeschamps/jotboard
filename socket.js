@@ -61,7 +61,6 @@ function checkRoom(user, id){
 		for (var i = 0; i < local_db[id].users.length; i++) {
 			if( local_db[id].users[i].unique != unique){
 				user.unique = unique;
-				console.log('inside');
 				local_db[id].users.splice(i, 0, user);
 				found = true;
 				break;
@@ -82,6 +81,7 @@ function checkRoom(user, id){
 			users: [user],
 			history: []
 		};
+		console.log(local_db[id].history)
 		user.conn.send(JSON.stringify({
 			type: 'history',
 			history: local_db[id].history

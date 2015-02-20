@@ -14,9 +14,9 @@ var User = function(unique){
 		// at that area and set this x and y
 		if(msg.type === 'start'){
 			console.log('here');
-			context.strokeStyle = "#df4b26";
+			context.strokeStyle = msg.color;
   			context.lineJoin = "round";
-  			context.lineWidth = 10;
+  			context.lineWidth = msg.stoke_size;
 			this.x = msg.x;
 			this.y = msg.y;
 			context.beginPath();
@@ -29,9 +29,9 @@ var User = function(unique){
 		// previous point to new point and update
 		// current point to new point
 		}else if(msg.type === 'draw'){
-			context.strokeStyle = "#df4b26";
+			context.strokeStyle = msg.color;
   			context.lineJoin = "round";
-  			context.lineWidth = 5;
+  			context.lineWidth = msg.stroke_size;
   			context.moveTo(this.x,this.y);
   			context.lineTo(msg.x, msg.y);
   			this.x = msg.x;
@@ -65,48 +65,97 @@ window.onload = function(){
 
 	var canvas_div = document.getElementById('canvas-div');
 	var canvas = document.createElement('canvas');
-	canvas.setAttribute('width', '800px');
-	canvas.setAttribute('height', '800px');
+	canvas.setAttribute('width', window.innerWidth + 'px');
+	canvas.setAttribute('height', '100%');
 	canvas.setAttribute('id', 'canvas');
 	canvas_div.appendChild(canvas);
 	var context = canvas.getContext('2d');
-	startDrawing(context);
+	startDrawing(context, canvas);
 };
 
 
-function startDrawing(ctx){
+function startDrawing(ctx, canvas){
+	var color = 'blue';
+	var stroke_size = 7;
 
-	// var alex = new User('alex');
+	var packet = [];
+
+	$('#eraser').click(function(evt){
+		color = 'white';
+		stroke_size = 25;
+	})
+
+	$('#pen').click(function(evt){
+		color = 'blue';
+		stroke_size = 7;
+	})
 
 	$('#canvas').mousedown(function(e){
 		drawing = true;
 		var x = e.offsetX,
 			y = e.offsetY;
+		down(x,y);
+	});
 
+	canvas.addEventListener('touchstart',function(e){
+		var parentOffset = $(this).parent().offset(); 
+		var x = e.changedTouches[0].pageX - parentOffset.left;
+		var y = e.changedTouches[0].pageY - parentOffset.top;
+		down(x,y);
+	})
+
+	function down(x,y){
 		var msg = {
 			type: 'start',
+			stoke_size: stroke_size,
+			color: color,
 			x: x,
 			y: y
 		};
-		ws.send(JSON.stringify(msg));
-	})
+		packet.push(msg);
+	}
 
 	$('#canvas').mousemove(function(e){
 		if(drawing){
 			var x = e.offsetX,
 				y = e.offsetY;
-			var msg = {
-				type: 'draw',
-				x: x,
-				y: y
-			};
-			ws.send(JSON.stringify(msg));
+			move(x,y);
 		}
-	})
+	});
 
-	$(document).mouseup(function(e){
+	canvas.addEventListener('touchmove',function(e){
+		var parentOffset = $(this).parent().offset(); 
+		var x = e.changedTouches[0].pageX - parentOffset.left;
+		var y = e.changedTouches[0].pageY - parentOffset.top;
+		console.log( x + " " + y);
+		move(x,y);
+	});
+
+	function move(x,y){
+		var msg = {
+			type: 'draw',
+			stoke_size: stroke_size,
+			color: color,
+			x: x,
+			y: y
+		};
+		packet.push(msg);
+		if(packet.length >= 10){
+			ws.send(JSON.stringify(packet));	
+			packet = [];
+		}
+	}
+
+	canvas.addEventListener('touchend', stop);
+	$(document).mouseup(stop);
+	
+	function stop(){
 		drawing = false;
-	})
+		if(packet.length != 0){
+			ws.send(JSON.stringify(packet));
+			packet = [];
+		}
+	}
 
 
 	// starts websocket connections
@@ -119,19 +168,25 @@ function startDrawing(ctx){
 
 	// receiving messages
 	ws.addEventListener('message', function(evt){
-		msg = JSON.parse(evt.data)
+		var msg = JSON.parse(evt.data)
 		// console.log(msg);
 		if( msg.type === 'history'){
 			// console.log(msg);
+			console.log(msg);
 			msg.history.forEach(function(j_msg){
 				var pathing = JSON.parse(j_msg);;
-				var current_user = checkUsers(pathing);
-				current_user.draw(pathing, ctx)
+				console.log(pathing);
+				var current_user = checkUsers(pathing[0]);
+				pathing.forEach(function(message){
+					current_user.draw(message,ctx);
+				})
 			})
 			// console.log(JSON.parse(msg.history));
 		}else{
-			var current_user = checkUsers(msg);
-			current_user.draw(msg,ctx);
+			var current_user = checkUsers(msg[0]);
+			msg.forEach(function(message){
+				current_user.draw(message,ctx);
+			})
 		}
 	});
 }

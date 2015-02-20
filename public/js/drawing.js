@@ -85,10 +85,16 @@ function startDrawing(ctx, canvas){
 		stroke_size = 25;
 	})
 
-	$('#pen').click(function(evt){
-		color = 'blue';
-		stroke_size = 7;
-	})
+	$('.pen').click(function(evt){
+		var size = $(this).attr('id');
+		if(size === 'large'){
+			stroke_size = 20;
+		}else if(size === 'medium'){
+			stroke_size = 14;
+		}else if(size === 'small'){
+			stroke_size === 7;
+		}
+	});
 
 	$('.color').click(function(evt){
 		console.log($(this).attr('id'));

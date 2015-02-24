@@ -1,54 +1,87 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="en">
 <head>
+	<link rel="stylesheet" href="/css/reset.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/css/main.css">
 	<meta charset="UTF-8">
 	<title>Dashboard</title>
-	<link rel="stylesheet" href="/css/main.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src='/js/dashboard.js'></script>
 </head>
 <body>
-	<h1> <%= @user.username %> </h1>
-	<form action="/login" method='POST'>
-		<input type="hidden" name="_method" value="DELETE">
-		<button>Logout</button>
-	</form>
-	<a href="/project/new">Create New Project</a>
-	<div class="dashboard">
-		<h2>Your Projects</h2>
-		<ul id="boards">
-			<% @projects.each do |project| %>
-			<li><a href="/project/<%=project.id%>"><%=project.title %></a></li>
-			<% end %>
-		</ul>
+	<div class="container-fluid">
+	<div class="row header">
+	<div class="navbar col-md-12">
+		<h3 class="white name inline" id="project-title">JotBoard</h3>
+		<form class='inline pull-right logout-form' id='logout' action="/login" method='POST'>
+			<input type="hidden" name="_method" value="DELETE">
+			<button class='btn'>Logout</button>
+		</form>
 	</div>
-	<div class="board">
-		<ul>
+	</div>
+	</div>
+	<div class="container">	
+	<div class="row">
+	<div class="col-md-12">
+	<h2 class="welcome">Welcome, <%= @user.username %></h2>
+	<div class="">
+		
+		<div class="projects">
+			<h3 class="titles">Your Projects</h3>
+			<div class="row">
+				<% if @projects %>
+				<% @projects.each do |project| %>
+				<a href="/project/<%=project.id%>"><div class='col-md-4 col-xs-12 project'><%=project.title %></div></a>
+				<% end %>
+				<% end %>
+				<div class='col-md-4 col-xs-12 project'>
+					<h3 class="create-new white right-sidebar-h3">Create New Project</h3>
+		<form action="/project" method='POST'>
+			<label for="title" class='white'>Title: </label>
+			<input type="text" name='title'>
+		</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- </div> -->
+	
+	<div class="">
+		<h3>Collaborations</h3>
+		<div class="row">
+			<% if @collabs %>
+			<% @collabs.each do |collab| %>
+				<a href="/project/<%=collab.project.id%>"><div class='col-md-4 col-xs-12 project'><%=collab.project.title %></div></a>
+			<% end %>
+			<% end %>
 			<% if @invites %>
 			<% @invites.each do |invite| %>
-				<li><%= invite.project.title %> by <%= invite.project.user.username %>
+			<div class='col-md-4 col-xs-12 project'>
+				<p class='white'><%= invite.project.title %> by <%= invite.project.user.username %></p>
 					<form action="/collab" method='POST'>
 						<input type="hidden" name='invite_id'value='<%=invite.id%>'>
-						<button>Accept</button>
+						<button class='inline'>Accept</button>
 					</form>
-					<form action='/invite/<%=invite.id%>' method='POST'>
+					<form action='/invite/<%=invite.id%>' method='POST' >
 						<input type="hidden" name='_method' value='DELETE'>
-						<input type="hidden" name='invite_id'value='<%=invite.id%>'>
-						<button>Decline</button>
+						<input type="hidden" name='invite_id'value='<%=invite.id%>' class='inline'>
+						<button class='inline'>Decline</button>
 					</form>
-				<!-- <button class='acceptBut' id='accept<%=invite.id%>'>Accept</button> -->
-				<!-- <button class='declineBut' id='decline<%=invite.id%>'>Decline</button></li> -->
+			</div>
 			<% end %>
 			<% end %>
-		</ul>
+		</div>
 	</div>
-	<div class="collabs">
-		<h2>Collaborations</h2>
-		<ul id='collabs'>
-			<% @collabs.each do |collab| %>
-				<li><a href="/project/<%=collab.project.id%>"><%=collab.project.title%></a></li>
-			<% end %>
-		</ul>
+	</div>
+	
+	</div>
 	</div>
 </body>
 </html>

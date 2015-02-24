@@ -68,7 +68,7 @@ get '/dashboard' do
 		@user = User.find_by({id: session[:user_id]})
 		@invites = Invite.where({user_id: session[:user_id]})
 		@collabs = Collab.where({user_id: session[:user_id]})
-		erb :dashboard2
+		erb :dashboard
 	else
 		redirect '/'
 	end 

@@ -1,0 +1,90 @@
+.header{
+	width: 100%;
+	height: 60px;
+	background-color: orange;
+	position: fixed;
+}
+
+.tools{
+	/*display: inline-block;*/
+	float: left;
+	height: 100%;
+	margin: 0;
+	border: 2px solid black;
+	border-radius: 5px;
+	width: 33.333%;
+}
+ul{
+	height: 100%;
+	width: 100%;
+}
+
+.tool-header{
+	height: 100%;
+	position: relative;
+	display: inline-block;
+	/*border: 2px black solid;*/
+}
+
+#name{
+	width: 20%;
+	font-size: 30px;
+	float: left;
+	border: 2px black solid;
+}
+#back{
+	min-width: 75px;
+	max-width: 100px;
+	width: 10%;
+	font-size: 30px;
+	float: left;
+	border: 2px black solid;
+}
+#back h3{
+	text-align: center;
+	line-height: 60px;
+}
+#tool-box{
+	width: 220px;
+	float: right;
+}
+.color{
+
+	height:100%;
+	width: 40px;
+	border-radius: 5px;
+}
+#colors{
+	background-color: black;
+	padding: 5%;
+}
+#red{
+	background-color: red;
+}
+
+li h3{
+	text-align: center;
+	font-size: 16px;
+	line-height: 75px;
+}
+i{
+	/*padding-top: 5px;*/
+	/*position: relative;*/
+}
+
+@media screen and (max-width: 350px){
+	.header{
+		height: 40px;
+	}
+	#name{
+		display: none;
+		color: red;
+	}
+	#back{
+		width: 40px;
+	}
+	li h3{
+		font-size: 10px;
+		line-height: 50px;
+	}
+}

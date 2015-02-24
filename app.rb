@@ -74,6 +74,10 @@ get '/dashboard' do
 	end 
 end
 
+get '/testing' do
+	erb :test
+end
+
 
 ####
 #     CRUD routes for projects

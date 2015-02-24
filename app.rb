@@ -56,7 +56,7 @@ post '/user' do
 		session[:user_id] = id.id
 		redirect '/dashboard'
 	else
-		redirect '/signup'
+		redirect '/'
 	end
 end
 
@@ -72,10 +72,6 @@ get '/dashboard' do
 	else
 		redirect '/'
 	end 
-end
-
-get '/dashboard2' do
-	erb :dashboard2
 end
 
 

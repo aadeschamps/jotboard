@@ -42,12 +42,15 @@ var User = function(unique){
 	};
 };
 
+// initializing variables needed
 var users = [],
 	drawing = false;
 
 
-
+//starts when the page loads
 window.onload = function(){
+
+	// sends ajax request to server on enter key
 	$( '#inviteInput' ).keypress(function(e) {
 		var key = e.which;
 		if(key === 13){
@@ -64,6 +67,8 @@ window.onload = function(){
 		}
 	});
 
+	// creates the canvas element for the page and sets
+	// the height and width
 	var canvas_div = document.getElementById('canvas-div');
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('width', '800px');
@@ -71,6 +76,7 @@ window.onload = function(){
 	canvas.setAttribute('id', 'canvas');
 	canvas_div.appendChild(canvas);
 	var context = canvas.getContext('2d');
+	// allows you to start drawing on canvas
 	startDrawing(context, canvas);
 };
 
@@ -81,11 +87,15 @@ function startDrawing(ctx, canvas){
 
 	var packet = [];
 
+	// on click, forces the color of the 
+	// drawing to white and sets strokesize
 	$('#eraser').click(function(evt){
 		color = 'white';
 		stroke_size = 25;
 	})
 
+	// on click, sets the size of the stroke
+	// according to the id of the button clicked
 	$('.size').click(function(evt){
 		var size = $(this).attr('id');
 		console.log(size);
@@ -98,6 +108,8 @@ function startDrawing(ctx, canvas){
 		}
 	});
 
+	// on click, sets the color of the brush
+	// according to the id of the button clicked
 	$('.color').click(function(evt){
 		console.log($(this).attr('id'));
 		color = $(this).attr('id');
@@ -106,6 +118,9 @@ function startDrawing(ctx, canvas){
 		}
 	})
 
+	// when mousedown event occurs on the canvas
+	// the drawing variable is set to true and the
+	// point is recorded
 	$('#canvas').mousedown(function(e){
 		drawing = true;
 		var x = e.offsetX,
@@ -113,6 +128,7 @@ function startDrawing(ctx, canvas){
 		down(x,y);
 	});
 
+	// same thing as above except for touch screen
 	canvas.addEventListener('touchstart',function(e){
 		var parentOffset = $(this).parent().offset(); 
 		var x = e.changedTouches[0].pageX - parentOffset.left;
@@ -120,6 +136,7 @@ function startDrawing(ctx, canvas){
 		down(x,y);
 	})
 
+	// stores the coordinates and color of the first click
 	function down(x,y){
 		var msg = {
 			type: 'start',
@@ -131,6 +148,7 @@ function startDrawing(ctx, canvas){
 		packet.push(msg);
 	}
 
+	// on mouse move, record the point to which it moved
 	$('#canvas').mousemove(function(e){
 		if(drawing){
 			var x = e.offsetX,
@@ -139,6 +157,7 @@ function startDrawing(ctx, canvas){
 		}
 	});
 
+	// same as above but for touch screen
 	canvas.addEventListener('touchmove',function(e){
 		var parentOffset = $(this).parent().offset(); 
 		var x = e.changedTouches[0].pageX - parentOffset.left;
@@ -147,6 +166,7 @@ function startDrawing(ctx, canvas){
 		move(x,y);
 	});
 
+	// stores message when mouse if moved
 	function move(x,y){
 		var msg = {
 			type: 'draw',
@@ -155,6 +175,9 @@ function startDrawing(ctx, canvas){
 			x: x,
 			y: y
 		};
+
+		// sends the packet if the packet exceded
+		// 10 items
 		packet.push(msg);
 		if(packet.length >= 10){
 			ws.send(JSON.stringify(packet));	
@@ -162,6 +185,8 @@ function startDrawing(ctx, canvas){
 		}
 	}
 
+	// sends the packet when the mouse is up or the finger
+	// is lifted off of the touch screen
 	canvas.addEventListener('touchend', stop);
 	$(document).mouseup(stop);
 	
@@ -209,7 +234,9 @@ function startDrawing(ctx, canvas){
 }
 
 
-
+// makes a user if a new user draws
+// or find the user that send the message
+// returns the user found
 function checkUsers(msg){
 	console.log(msg);
 	var exists = false;

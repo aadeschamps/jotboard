@@ -236,7 +236,7 @@ function startDrawing(ctx, canvas){
 
 // makes a user if a new user draws
 // or find the user that send the message
-// returns the user found
+// returns the user found--
 function checkUsers(msg){
 	console.log(msg);
 	var exists = false;

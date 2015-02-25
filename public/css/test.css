@@ -91,10 +91,29 @@
 	background-color: blue;
 }
 
+#sizes ul {
+	display: none;
+	height: 180px;
+	background-color: black;
+	/*margin-top: -20px;*/
+}
+#sizes ul li div{
+	line-height: 60px;
+	background-color: blue;
+	border-radius: 10px;
+	height: 60px;
+	text-align: center;
+}
+
+
+
 li h3{
+	border-radius: 10px;
 	text-align: center;
 	font-size: 16px;
 	line-height: 75px;
+	height: 56px;
+	background-color: green;
 }
 i{
 	/*padding-top: 5px;*/

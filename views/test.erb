@@ -24,15 +24,21 @@
     <ul id="tool-bar">
       <li id="eraser" class='tools'><h3><i class="fa fa-eraser fa-3x"></i></h3></li>
       <li id="colors" class='tools'>
-        <div><div class="color red"></div></div>
+        <div><div id='current-color' class="color red"></div></div>
         <ul id='all-colors'>
-          <li class='change-color'><div class="blue color"></div></li>
-          <li class='change-color'><div class='color green'></div></li>
-          <li class='change-color'><div class='color red'></div></li>
-          <li class='change-color'><div class='color purple'></div></li>
+          <li class='change-color' id='blue'><div class="color blue"></div></li>
+          <li class='change-color' id='green'><div class='color green'></div></li>
+          <li class='change-color' id='red'><div class='color red'></div></li>
+          <li class='change-color' id='purple'><div class='color purple'></div></li>
         </ul>
       </li>
-      <li id="sizes" class='tools'><h3><i class="fa fa-pencil fa-3x"></i><h3></li>
+      <li id="sizes" class='tools'><h3><i class="fa fa-pencil fa-3x"></i></h3>
+        <ul id='all-sizes'>
+          <li><div class="size thick">Thick</div></li>
+          <li><div class="size medium">Medium</div></li>
+          <li><div class="size thin">Thin</div></li>
+        </ul>
+      </li>
     </ul>
     </div>
   </div>

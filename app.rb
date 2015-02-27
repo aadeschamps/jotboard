@@ -97,7 +97,6 @@ get '/project/:id' do
 	## security if someone who is not a collab or user
 	collabs.each do |collab|
 		if(collab[:user_id] == session[:user_id])
-			
 			collaborator = true
 		end
 	end

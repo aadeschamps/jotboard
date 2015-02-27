@@ -37,7 +37,7 @@
 #name{
 	margin-left: 10px;
 	color: white;
-	width: 20%;
+	/*width: 20%;*/
 	line-height: 60px;
 	font-size: 30px;
 	float: left;
@@ -147,6 +147,13 @@
 	text-align: center;
 }
 
+.top{
+	position: relative;
+	top: 18px;
+	float: left;
+	margin-left: 5px;
+	width: 150px;
+}
 
 .tools{
 	border-radius: 10px;
@@ -182,6 +189,10 @@
 }
 
 @media screen and (max-width: 350px){
+	.top{
+		width: 100px;
+		top: 8px;
+	}
 	.header{
 		height: 40px;
 	}

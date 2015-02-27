@@ -14,7 +14,7 @@ $('.change-color').click(function(){
 	var id = $(this).attr('id')
 	console.log(id);
 	$('#current-color').removeClass();
-	$('#current-color').addClass('color ' + id);
+	$('#current-color').addClass('abs-center color ' + id);
 })
 
 var size_clicked = false;

@@ -71,8 +71,8 @@ window.onload = function(){
 	// the height and width
 	var canvas_div = document.getElementById('canvas-div');
 	var canvas = document.createElement('canvas');
-	canvas.setAttribute('width', '800px');
-	canvas.setAttribute('height', '800px');
+	canvas.setAttribute('width', '1800px');
+	canvas.setAttribute('height', '1800px');
 	canvas.setAttribute('id', 'canvas');
 	canvas_div.appendChild(canvas);
 	var context = canvas.getContext('2d');
@@ -87,6 +87,38 @@ function startDrawing(ctx, canvas){
 
 	var packet = [];
 
+
+	var colors_clicked = false;
+	$('#colors').click(function(){
+		if( colors_clicked ){
+			$('#all-colors').css('display', 'none')
+			colors_clicked = false;
+		}else{
+			$('#all-colors').css('display', 'block')
+			colors_clicked = true;
+		}
+	})
+
+	$('.change-color').click(function(){
+		var id = $(this).attr('id')
+		console.log(id);
+		color = $(this).attr('id');
+		$('#current-color').removeClass();
+		$('#current-color').addClass('abs-center color ' + id);
+	})
+
+	var size_clicked = false;
+	$('#sizes').click(function(){
+		if( size_clicked ){
+			$('#all-sizes').css('display', 'none')
+			size_clicked = false;
+		}else{
+			$('#all-sizes').css('display', 'block')
+			size_clicked = true;
+		}
+	})
+
+
 	// on click, forces the color of the 
 	// drawing to white and sets strokesize
 	$('#eraser').click(function(evt){
@@ -99,11 +131,11 @@ function startDrawing(ctx, canvas){
 	$('.size').click(function(evt){
 		var size = $(this).attr('id');
 		console.log(size);
-		if(size === 'large'){
+		if(size === 'thick'){
 			stroke_size = 20;
 		}else if(size === 'medium'){
 			stroke_size = 14;
-		}else if(size === 'small'){
+		}else if(size === 'thin'){
 			stroke_size === 7;
 		}
 	});
@@ -200,8 +232,8 @@ function startDrawing(ctx, canvas){
 
 
 	// starts websocket connections
-	// ws = new WebSocket("ws://localhost:3000");
-	ws = new WebSocket("ws://alex.princesspeach.nyc:3000");
+	ws = new WebSocket("ws://localhost:3000");
+	// ws = new WebSocket("ws://alex.princesspeach.nyc:3000");
 
 	// immediately sends key
 	ws.addEventListener('open', function(){

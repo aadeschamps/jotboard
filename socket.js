@@ -1,16 +1,16 @@
 var WebSocketServer = require("ws").Server;
 var server = new WebSocketServer({port: 3000});
 var sqlite3 = require('sqlite3').verbose();
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 
 
 // testing mongoose stuff
-mongoose.connect('mongodb://localhost:test');
-var mdb = mongoose.connection;
-mdb.on('error', console.error.bind(console, 'connection error'));
-mdb.once('open', function(callback){
-	console.log('YAY');
-});
+// mongoose.connect('mongodb://localhost:test');
+// var mdb = mongoose.connection;
+// mdb.on('error', console.error.bind(console, 'connection error'));
+// mdb.once('open', function(callback){
+// 	console.log('YAY');
+// });
 
 
 

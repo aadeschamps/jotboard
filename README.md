@@ -42,11 +42,15 @@ Now you can view in the browser via local host port 8080.
 * need confirmation of invite (done, in a crude way)
 * only allow one person to draw at a given time (done)
 * add mongoDb to socket server
+* doest not curently work on firefox (fixed)
+* add in email validation support
+
 
 
 
 ## Later things to change/add
 * Want to make dashboard use ajax instead of refreshes
+* add in email when you get an invite
 * change the stroke sizes to a slider
 * add in ability to write text
 * add color pallete

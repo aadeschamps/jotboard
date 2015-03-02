@@ -184,8 +184,9 @@ function startDrawing(ctx, canvas){
 	// on mouse move, record the point to which it moved
 	$('#canvas').mousemove(function(e){
 		if(drawing){
-			var x = e.offsetX,
-				y = e.offsetY;
+			var x = e.offsetX || e.clientX - $(e.target).offset().left,
+				y = e.offsetY || e.clientY - $(e.target).offset().top;
+			console.log(x)
 			move(x,y);
 		}
 	});
@@ -234,8 +235,8 @@ function startDrawing(ctx, canvas){
 
 
 	// starts websocket connections
-	// ws = new WebSocket("ws://localhost:3000");
-	ws = new WebSocket("ws://alex.princesspeach.nyc:3000");
+	ws = new WebSocket("ws://localhost:3000");
+	// ws = new WebSocket("ws://alex.princesspeach.nyc:3000");
 
 	// immediately sends key
 	ws.addEventListener('open', function(){
@@ -259,7 +260,7 @@ function startDrawing(ctx, canvas){
 		}else{
 			var current_user = checkUsers(msg[0]);
 			msg.forEach(function(message){
-				console.log(message);
+				// console.log(message);
 				current_user.draw(message,ctx);
 			})
 		}

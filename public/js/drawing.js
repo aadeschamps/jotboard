@@ -13,7 +13,6 @@ var User = function(unique){
 		// if type is start, draw a small point
 		// at that area and set this x and y
 		if(msg.type === 'start'){
-			console.log('here');
 			context.strokeStyle = msg.color;
   			context.lineJoin = "round";
   			context.lineWidth = msg.stoke_size;

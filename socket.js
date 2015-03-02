@@ -80,7 +80,8 @@ function checkRoom(user, id){
 		user.unique = 1;
 		local_db[id] = {
 			users: [user],
-			history: []
+			history: [],
+			drawing: false
 		};
 		console.log(local_db[id].history)
 		user.conn.send(JSON.stringify({
@@ -96,11 +97,22 @@ function checkRoom(user, id){
 function sendMessages(user, msg){
 	room = local_db[user.roomId];
 	var buffer = JSON.parse(msg);
-	buffer.unique = user.unique;
-	console.log(buffer);
-	var new_msg = JSON.stringify(buffer);
-	room.users.forEach(function(elem){
-		elem.conn.send(new_msg);
-	});
-	room.history.push(new_msg);
+	// checks to see if someone is drawing
+	if (!room.drawing){
+		// checks to see if this is the start
+		if (buffer[0].type === 'start'){
+			room.drawing = user.unique;
+		}
+	}
+	if(room.drawing === user.unique){
+		if(buffer[buffer.length-1].type === 'end'){
+			room.drawing = false;
+		}
+		buffer.unique = user.unique;
+		var new_msg = JSON.stringify(buffer);
+		room.users.forEach(function(elem){
+			elem.conn.send(new_msg);
+		});
+		room.history.push(new_msg);
+	}
 }

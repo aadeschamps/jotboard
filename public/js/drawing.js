@@ -224,6 +224,8 @@ function startDrawing(ctx, canvas){
 	
 	function stop(){
 		drawing = false;
+		var end = {type: 'end'}
+		packet.push(end);
 		if(packet.length != 0){
 			ws.send(JSON.stringify(packet));
 			packet = [];
@@ -257,6 +259,7 @@ function startDrawing(ctx, canvas){
 		}else{
 			var current_user = checkUsers(msg[0]);
 			msg.forEach(function(message){
+				console.log(message);
 				current_user.draw(message,ctx);
 			})
 		}

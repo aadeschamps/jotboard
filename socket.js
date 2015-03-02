@@ -15,10 +15,6 @@ var sqlite3 = require('sqlite3').verbose();
 
 
 
-
-
-
-
 // connects to same database that sinatra server
 // --- connects to
 var db = new sqlite3.Database("jot.db");

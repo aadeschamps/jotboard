@@ -235,8 +235,8 @@ function startDrawing(ctx, canvas){
 
 
 	// starts websocket connections
-	ws = new WebSocket("ws://localhost:3000");
-	// ws = new WebSocket("ws://alex.princesspeach.nyc:3000");
+	// ws = new WebSocket("ws://localhost:3000");
+	ws = new WebSocket("ws://jotboard.co:3000");
 
 	// immediately sends key
 	ws.addEventListener('open', function(){

@@ -36,7 +36,7 @@ and this one for the WebSocket server:
 Now you can view in the browser via local host port 8080. 
 
 
-## Things thats need to be Fixed/Completed
+## Things that need to be Fixed/Completed
 * Color starts of blue, need to add black (done)
 * Changing sizes does not work (done)
 * need confirmation of invite (done, in a crude way)

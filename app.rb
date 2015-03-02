@@ -51,10 +51,14 @@ post '/user' do
 			password: params[:password],
 			email: params[:email]
 		}
-		User.create(user)
+		check = User.create(user)
 		id = User.find_by(username: params[:username])
-		session[:user_id] = id.id
-		redirect '/dashboard'
+		if check.valid?
+			session[:user_id] = id.id
+			redirect '/dashboard'
+		else
+			redirect '/'
+		end
 	else
 		redirect '/'
 	end
@@ -72,10 +76,6 @@ get '/dashboard' do
 	else
 		redirect '/'
 	end 
-end
-
-get '/testing' do
-	erb :test
 end
 
 
@@ -100,7 +100,10 @@ get '/project/:id' do
 			collaborator = true
 		end
 	end
-	if session[:user_id] == @project[:user_id] || collaborator
+	if session[:user_id] === @project[:user_id]
+		@owner = true
+	end
+	if @owner || collaborator
 		erb :project
 	else
 		redirect '/'
@@ -142,10 +145,13 @@ post '/project/:id/invite' do
 	request.body.rewind
 	username = JSON.parse request.body.read
 	user = User.find_by({username: username["username"]})
-	invite = Invite.find_by({user_id: user.id, project_id: params[:id].to_i})
-	collab = Collab.find_by({user_id: user.id, project_id: params[:id].to_i})
+	project = Project.find_by({id: params[:id]})
+	if user
+		invite = Invite.find_by({user_id: user.id, project_id: params[:id].to_i})
+		collab = Collab.find_by({user_id: user.id, project_id: params[:id].to_i})
+	end
 	# no duplicate invites or collabs
-	if user && user.id != session[:user_id] && !invite && !collab
+	if user && session[:user_id] === project.user_id && user.id != session[:user_id] && !invite && !collab
 		invite = {
 			user_id: user.id,
 			project_id: params[:id].to_i

@@ -56,13 +56,18 @@ window.onload = function(){
 		if(key === 13){
 			var invitee = $('#inviteInput').val();
 			var project_id = $('#project_id').val();
-			console.log(project_id);
+			// console.log(project_id);
 			var inv = {
 				username: invitee,
 			};
 			var route = '/project/' + project_id + '/invite';
 			$.post(route, JSON.stringify(inv), function(data,status){
-				console.log(data);
+				var status = JSON.parse(data).status;
+				$('#inviteInput').val('');
+				$('#inviteInput').attr('placeholder', status);
+				// if (data.status === 'success'){
+				// 	$('#inviteInput').val('success');
+				// }
 			});
 		}
 	});
@@ -82,7 +87,7 @@ window.onload = function(){
 
 
 function startDrawing(ctx, canvas){
-	var color = 'blue';
+	var color = 'black';
 	var stroke_size = 7;
 
 	var packet = [];
@@ -101,7 +106,6 @@ function startDrawing(ctx, canvas){
 
 	$('.change-color').click(function(){
 		var id = $(this).attr('id')
-		console.log(id);
 		color = $(this).attr('id');
 		$('#current-color').removeClass();
 		$('#current-color').addClass('abs-center color ' + id);
@@ -130,20 +134,18 @@ function startDrawing(ctx, canvas){
 	// according to the id of the button clicked
 	$('.size').click(function(evt){
 		var size = $(this).attr('id');
-		console.log(size);
 		if(size === 'thick'){
 			stroke_size = 20;
 		}else if(size === 'medium'){
 			stroke_size = 14;
 		}else if(size === 'thin'){
-			stroke_size === 7;
+			stroke_size = 7;
 		}
 	});
 
 	// on click, sets the color of the brush
 	// according to the id of the button clicked
 	$('.color').click(function(evt){
-		console.log($(this).attr('id'));
 		color = $(this).attr('id');
 		if(stroke_size === 25){
 			stroke_size = 7;
@@ -194,7 +196,6 @@ function startDrawing(ctx, canvas){
 		var parentOffset = $(this).parent().offset(); 
 		var x = e.changedTouches[0].pageX - parentOffset.left;
 		var y = e.changedTouches[0].pageY - parentOffset.top;
-		console.log( x + " " + y);
 		move(x,y);
 	});
 
@@ -246,10 +247,8 @@ function startDrawing(ctx, canvas){
 		// console.log(msg);
 		if( msg.type === 'history'){
 			// console.log(msg);
-			console.log(msg);
 			msg.history.forEach(function(j_msg){
 				var pathing = JSON.parse(j_msg);;
-				console.log(pathing);
 				var current_user = checkUsers(pathing[0]);
 				pathing.forEach(function(message){
 					current_user.draw(message,ctx);
@@ -270,12 +269,10 @@ function startDrawing(ctx, canvas){
 // or find the user that send the message
 // returns the user found--
 function checkUsers(msg){
-	console.log(msg);
 	var exists = false;
 	var current_user;
 	users.forEach(function(user){
 		if(user.unique === msg.unique){
-			console.log('exists');
 			exists = true;
 			current_user = user;
 		}

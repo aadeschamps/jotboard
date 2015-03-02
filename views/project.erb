@@ -19,25 +19,27 @@
   <div class="header">
     <a href="/dashboard" id="back" class='tool-header'><h3>Back</h3></a>
     <h3 id="name" class='tool-header'><%=@project.title%></h1>
-    <input id='inviteInput' class='top' type='text' placeholder='invite user'>
+    <% if @owner %>
+      <input id='inviteInput' class='top' type='text' placeholder='invite user'>
+    <% end %>
     <input type="hidden" id="project_id" value='<%=@project.id%>'>
     <div id="tool-box" class='tool-header'>
       <ul id="tool-bar">
         <li id="eraser" class='tools'><div class="abs-center-div"><i class="fa fa-eraser fa-3x abs-center"></i></div><div></li>
         <li id="colors" class='tools'>
-          <div class='abs-center-div'><div id='current-color' class="color red abs-center"></div></div>
+          <div class='abs-center-div'><div id='current-color' class="color black abs-center"></div></div>
           <ul id='all-colors'>
             <li class='change-color' id='blue'><div class='abs-center-div'><div class="color blue abs-center"></div></div></li>
             <li class='change-color' id='green'><div class='abs-center-div'><div class='color green abs-center'></div></div></li>
             <li class='change-color' id='red'><div class='abs-center-div'><div class='color red abs-center'></div></div></li>
-            <li class='change-color' id='purple'><div class='abs-center-div'><div class='color purple abs-center'></div></div></li>
+            <li class='change-color' id='black'><div class='abs-center-div'><div class='color black abs-center'></div></div></li>
           </ul>
         </li>
         <li id="sizes" class='tools'><div class="abs-center-div"><i class="fa fa-pencil fa-3x abs-center"></i>
           </div><ul id='all-sizes'>
-            <li><div class="size thick">Thick</div></li>
-            <li><div class="size medium">Medium</div></li>
-            <li><div class="size thin">Thin</div></li>
+            <li><div class="size thick" id='thick'>Thick</div></li>
+            <li><div class="size medium" id='medium'>Medium</div></li>
+            <li><div class="size thin" id='thin'>Thin</div></li>
           </ul>
         </li>
       </ul>
@@ -50,7 +52,6 @@
      var key = "<%= @project.keycode %>";
     </script>
 
-     <script src='/js/test.js'></script>
      <script src='/js/drawing.js'></script>
 </body>
 </html>

@@ -1,0 +1,7 @@
+var draw = (function(){
+
+	return {
+	
+	}
+
+}()

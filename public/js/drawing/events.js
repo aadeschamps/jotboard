@@ -1,5 +1,6 @@
+var app = app || {}
 
-function user(ctx, canvas){
+app.events = function(canvas){
 	var packet = [],
 		drawing = false;
 
@@ -20,7 +21,7 @@ function user(ctx, canvas){
 	$('.change-color').click(function(){
 		var id = $(this).attr('id')
 		var color = $(this).attr('id');
-		brush.set_color(color);
+		app.brush.set_color(color);
 		$('#current-color').removeClass();
 		$('#current-color').addClass('abs-center color ' + id);
 	})
@@ -40,15 +41,15 @@ function user(ctx, canvas){
 	// on click, forces the color of the 
 	// drawing to white and sets strokesize
 	$('#eraser').click(function(evt){
-		brush.set_stroke('eraser');
-		brush.set_color('white');
+		app.brush.set_stroke('eraser');
+		app.brush.set_color('white');
 	})
 
 	// on click, sets the size of the stroke
 	// according to the id of the button clicked
 	$('.size').click(function(evt){
 		var size = $(this).attr('id');
-		brush.set_stroke(size);
+		app.brush.set_stroke(size);
 	});
 
 
@@ -73,7 +74,7 @@ function user(ctx, canvas){
 
 	// stores the coordinates and color of the first click
 	function down(x,y){
-		var msg = brush.get_msg();
+		var msg = app.brush.get_msg();
 		msg.x = x;
 		msg.y = y;
 		msg.type = 'start';
@@ -99,7 +100,7 @@ function user(ctx, canvas){
 
 	// stores message when mouse if moved
 	function move(x,y){
-		var msg = brush.get_msg();
+		var msg = app.brush.get_msg();
 		msg.type = 'draw';
 		msg.x = x;
 		msg.y = y;
@@ -108,7 +109,7 @@ function user(ctx, canvas){
 		// 10 items
 		packet.push(msg);
 		if(packet.length >= 10){
-			socket.send(packet);	
+			app.socket.send(packet);	
 			packet = [];
 		}
 	}
@@ -123,7 +124,7 @@ function user(ctx, canvas){
 		var end = {type: 'end'}
 		packet.push(end);
 		if(packet.length != 0){
-			socket.send(packet);
+			app.socket.send(packet);
 			packet = [];
 		}
 	}

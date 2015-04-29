@@ -1,3 +1,4 @@
+
 $(function(){
 	// sends ajax request to server on enter key
 	$( '#inviteInput' ).keypress(function(e) {
@@ -30,6 +31,7 @@ $(function(){
 	canvas.setAttribute('id', 'canvas');
 	canvas_div.appendChild(canvas);
 	var context = canvas.getContext('2d');
+	app.context = context;
 	// allows you to start drawing on canvas
-	user(context, canvas);
+	app.events(canvas);
 });

@@ -1,4 +1,6 @@
-var brush = (function(){
+var app = app || {}
+
+app.brush = (function(){
 	var stroke_sizes = {		
 			thin: 7,
 			medium: 14,
@@ -29,6 +31,9 @@ var brush = (function(){
 			message.stroke_size = stroke_sizes[size];
 		},
 		set_color: function(color){
+			if(message.color === 'white') {
+				message.stroke_size = stroke_sizes.thin;
+			}
 			message.color = color;
 		}
 	}

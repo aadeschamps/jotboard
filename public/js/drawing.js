@@ -145,6 +145,7 @@ function startDrawing(ctx, canvas){
 	// on click, sets the color of the brush
 	// according to the id of the button clicked
 	$('.color').click(function(evt){
+		console.log($(this).attr('id'))
 		color = $(this).attr('id');
 		if(stroke_size === 25){
 			stroke_size = 7;
@@ -235,8 +236,8 @@ function startDrawing(ctx, canvas){
 
 
 	// starts websocket connections
-	// var ws = new WebSocket("ws://localhost:3000");
-	var ws = new WebSocket("ws://jotboard.co:3000");
+	var ws = new WebSocket("ws://localhost:3000");
+	// ws = new WebSocket("ws://jotboard.co:3000");
 
 	// immediately sends key
 	ws.addEventListener('open', function(){

@@ -1,8 +1,7 @@
 var app = app || {}
 
 app.events = function(canvas){
-	var packet = [],
-		drawing = false;
+	var drawing = false;
 
 	var colors_clicked = false;
 	$('#colors').click(function(){
@@ -78,7 +77,7 @@ app.events = function(canvas){
 		msg.x = x;
 		msg.y = y;
 		msg.type = 'start';
-		packet.push(msg);
+		app.packet.push(msg);
 	}
 
 	// on mouse move, record the point to which it moved
@@ -107,11 +106,7 @@ app.events = function(canvas){
 
 		// sends the packet if the packet exceded
 		// 10 items
-		packet.push(msg);
-		if(packet.length >= 10){
-			app.socket.send(packet);	
-			packet = [];
-		}
+		app.packet.push(msg);
 	}
 
 	// sends the packet when the mouse is up or the finger
@@ -122,10 +117,6 @@ app.events = function(canvas){
 	function stop(){
 		drawing = false;
 		var end = {type: 'end'}
-		packet.push(end);
-		if(packet.length != 0){
-			app.socket.send(packet);
-			packet = [];
-		}
+		app.packet.end(end);
 	}
 }

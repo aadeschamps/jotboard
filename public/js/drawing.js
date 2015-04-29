@@ -47,7 +47,7 @@ var users = [],
 
 
 //starts when the page loads
-window.onload = function(){
+$(function(){
 
 	// sends ajax request to server on enter key
 	$( '#inviteInput' ).keypress(function(e) {
@@ -82,7 +82,7 @@ window.onload = function(){
 	var context = canvas.getContext('2d');
 	// allows you to start drawing on canvas
 	startDrawing(context, canvas);
-};
+});
 
 
 function startDrawing(ctx, canvas){
@@ -235,8 +235,8 @@ function startDrawing(ctx, canvas){
 
 
 	// starts websocket connections
-	// ws = new WebSocket("ws://localhost:3000");
-	ws = new WebSocket("ws://jotboard.co:3000");
+	// var ws = new WebSocket("ws://localhost:3000");
+	var ws = new WebSocket("ws://jotboard.co:3000");
 
 	// immediately sends key
 	ws.addEventListener('open', function(){
@@ -279,7 +279,7 @@ function checkUsers(msg){
 			exists = true;
 			current_user = user;
 		}
-	});
+	});0
 	// console.log(current_user);
 	if(!exists){
 		current_user = new User(msg.unique);

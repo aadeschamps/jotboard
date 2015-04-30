@@ -37,25 +37,29 @@ server.on("connection", function(connection){
 		if(!user.roomId){
 			user.roomId = true;
 			// gets the project id from the keycode
-			db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
-				if(err){
-					console.log(err);
-				}else{
-					Projects.findOneAndUpdate(
-						{project_id: row.id}, 
-						{project_id: row.id}, 
-						{upsert: true}, 
-						function(err, doc){
-							if(err){
-								console.log(err);
-							} else {
-								user.roomId = row.id;
-								checkRoom(user, row.id);
+			try {
+				db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
+					if(err){
+						throw err
+					}else{
+						Projects.findOneAndUpdate(
+							{project_id: row.id}, 
+							{project_id: row.id}, 
+							{upsert: true}, 
+							function(err, doc){
+								if(err){
+									console.log(err);
+								} else {
+									user.roomId = row.id;
+									checkRoom(user, row.id);
+								}
 							}
-						}
-					)	
-				}
-			});
+						)	
+					}
+				});
+			}catch(e){
+				console.log(e);
+			}
 		}else{
 			sendMessages(user, message);
 		}

@@ -34,33 +34,31 @@ server.on("connection", function(connection){
 	connection.on('message',function(message){
 		// checks to see if its the first message
 		// ---the keycode is always the first thing that gets sent
+		console.log(user.roomId);
 		if(!user.roomId){
-			user.roomId = true;
+			console.log(message);
 			// gets the project id from the keycode
-			try {
-				db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
-					console.log('row is: ' + row);
-					if(row === undefined){
-						connection.close();
-					}else{
-						Projects.findOneAndUpdate(
-							{project_id: row.id}, 
-							{project_id: row.id}, 
-							{upsert: true}, 
-							function(err, doc){
-								if(err){
-									console.log(err);
-								} else {
-									user.roomId = row.id;
-									checkRoom(user, row.id);
-								}
+			db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
+				console.log('row is: ' + row);
+				if(row === undefined){
+					console.log('here');
+				}else{
+					console.log('here too');
+					Projects.findOneAndUpdate(
+						{project_id: row.id}, 
+						{project_id: row.id}, 
+						{upsert: true}, 
+						function(err, doc){
+							if(err){
+								console.log(err);
+							} else {
+								user.roomId = row.id;
+								checkRoom(user, row.id);
 							}
-						)	
-					}
-				});
-			}catch(e){
-				console.log(e);
-			}
+						}
+					)	
+				}
+			});
 		}else{
 			sendMessages(user, message);
 		}
@@ -69,8 +67,10 @@ server.on("connection", function(connection){
 	// removes person from room when connection
 	// --- ends
 	connection.on('close', function(){
-		var index = local_db[user.roomId].users.indexOf(user);
-		local_db[user.roomId].users.splice(index,1);
+		if(user.roomId){
+			var index = local_db[user.roomId].users.indexOf(user);
+			local_db[user.roomId].users.splice(index,1);
+		}
 	});
 });
 

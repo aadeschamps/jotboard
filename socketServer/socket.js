@@ -2,22 +2,14 @@ var WebSocketServer = require("ws").Server;
 var server = new WebSocketServer({port: 3000});
 var sqlite3 = require('sqlite3').verbose();
 var mongoose = require('mongoose');
-
-
-// testing mongoose stuff
-mongoose.connect('mongodb://localhost:test');
-var mdb = mongoose.connection;
-mdb.on('error', console.error.bind(console, 'connection error'));
-mdb.once('open', function(callback){
-	console.log('YAY');
-});
-
-
+var mdb = require('./db');
+var Projects = mdb.models.Projects;
+console.log(Projects);
 
 
 // connects to same database that sinatra server
 // --- connects to
-var db = new sqlite3.Database("jot.db");
+var db = new sqlite3.Database("../jot.db");
 
 
 
@@ -46,9 +38,23 @@ server.on("connection", function(connection){
 			user.roomId = true;
 			// gets the project id from the keycode
 			db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
-				if(err){throw err};
-				user.roomId = row.id;
-				checkRoom(user, row.id);
+				if(err){
+					throw err
+				}else{
+					Projects.findOneAndUpdate(
+						{project_id: row.id}, 
+						{project_id: row.id}, 
+						{upsert: true}, 
+						function(err, doc){
+							if(err){
+								console.log(err);
+							} else {
+								user.roomId = row.id;
+								checkRoom(user, row.id);
+							}
+						}
+					)	
+				}
 			});
 		}else{
 			sendMessages(user, message);
@@ -67,7 +73,7 @@ server.on("connection", function(connection){
 // checks to see if room exists and makes
 // one if it doesnt
 //------also sends down history of the room
-// -----added in unique id for each room to each user
+// -----added in unique id per room to each user
 function checkRoom(user, id){
 	if (!!local_db[id]){
 		var unique = 1;
@@ -85,30 +91,34 @@ function checkRoom(user, id){
 			user.unique = unique
 			local_db[id].users.push(user);
 		}
-		user.conn.send(JSON.stringify({
-			type: 'history',
-			history: local_db[id].history
-		}));
+		getHistory(id, function(history){
+			user.conn.send(JSON.stringify({
+				type: 'history',
+				history: history
+				})
+			);
+		});
 	}else{
 		user.unique = 1;
 		local_db[id] = {
 			users: [user],
-			history: [],
 			drawing: false
 		};
-		console.log(local_db[id].history)
-		user.conn.send(JSON.stringify({
-			type: 'history',
-			history: local_db[id].history
-			})
-		)
+		getHistory(id, function(history){
+			user.conn.send(JSON.stringify({
+				type: 'history',
+				history: history
+				})
+			);
+		});
+		
 	}
 }
 
 // looks up which room your in and sends
 // -- messages to all the users in it
 function sendMessages(user, msg){
-	room = local_db[user.roomId];
+	var room = local_db[user.roomId];
 	var buffer = JSON.parse(msg);
 	// checks to see if someone is drawing
 	if (!room.drawing){
@@ -121,11 +131,26 @@ function sendMessages(user, msg){
 		if(buffer[buffer.length-1].type === 'end'){
 			room.drawing = false;
 		}
-		buffer.unique = user.unique;
+		
+		buffer.unique = user.unique;	
 		var new_msg = JSON.stringify(buffer);
 		room.users.forEach(function(elem){
 			elem.conn.send(new_msg);
 		});
-		room.history.push(new_msg);
+		Projects.findOneAndUpdate(
+			{project_id: user.roomId}, 
+			{$push: {"messages": new_msg}},
+			{safe: true, upsert: true},
+			function(err, doc){
+				if(err){ console.log(err) }
+			}
+		)
 	}
+}
+
+
+function getHistory(id, callback){
+	Projects.findOne({project_id: id}, function(err, doc){
+		callback(doc.messages);
+	})
 }

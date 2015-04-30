@@ -1,10 +1,12 @@
-var WebSocketServer = require("ws").Server;
-var server = new WebSocketServer({port: 3000});
-var sqlite3 = require('sqlite3').verbose();
-var mongoose = require('mongoose');
-var mdb = require('./db');
-var Projects = mdb.models.Projects;
-console.log(Projects);
+var WebSocketServer = require("ws").Server,
+	server = new WebSocketServer({port: 3000}),
+	sqlite3 = require('sqlite3').verbose(),
+	mongoose = require('mongoose'),
+
+// starts connectiont to mongoDB
+// -- going to be used to store drawing history
+	mdb = require('./db'),
+	Projects = mdb.models.Projects;
 
 
 // connects to same database that sinatra server
@@ -21,14 +23,12 @@ var User = function(conn){
 
 
 // this will be a db hash used to control 
-// ---whos in what room
-// ------- I want to replace with mongoDb
-local_db = {};
+// ---whos in what room and therefore where to send messages to
+var local_db = {};
 
 
 // What happens when connection 
 server.on("connection", function(connection){
-	console.log('connected');
 	var user = new User(connection);
 	// what happens when a message comes in
 	connection.on('message',function(message){
@@ -39,7 +39,7 @@ server.on("connection", function(connection){
 			// gets the project id from the keycode
 			db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
 				if(err){
-					throw err
+					console.log(err);
 				}else{
 					Projects.findOneAndUpdate(
 						{project_id: row.id}, 
@@ -137,6 +137,7 @@ function sendMessages(user, msg){
 		room.users.forEach(function(elem){
 			elem.conn.send(new_msg);
 		});
+		// pushed new message to a given rooms history
 		Projects.findOneAndUpdate(
 			{project_id: user.roomId}, 
 			{$push: {"messages": new_msg}},
@@ -148,7 +149,7 @@ function sendMessages(user, msg){
 	}
 }
 
-
+// queries mongo database for the history of a room
 function getHistory(id, callback){
 	Projects.findOne({project_id: id}, function(err, doc){
 		callback(doc.messages);

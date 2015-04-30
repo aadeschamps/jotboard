@@ -33,17 +33,13 @@ server.on("connection", function(connection){
 	// what happens when a message comes in
 	connection.on('message',function(message){
 		// checks to see if its the first message
-		// ---the keycode is always the first thing that gets sent
-		console.log(user.roomId);
 		if(!user.roomId){
-			console.log(message);
 			// gets the project id from the keycode
 			db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
 				console.log('row is: ' + row);
 				if(row === undefined){
-					console.log('here');
+					console.log('error: wrong initial message');
 				}else{
-					console.log('here too');
 					Projects.findOneAndUpdate(
 						{project_id: row.id}, 
 						{project_id: row.id}, 

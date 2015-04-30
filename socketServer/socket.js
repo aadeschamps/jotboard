@@ -39,8 +39,8 @@ server.on("connection", function(connection){
 			// gets the project id from the keycode
 			try {
 				db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
-					console.log(row);
-					if(!row){
+					console.log('row is: ' + row);
+					if(row === undefined){
 						connection.close();
 					}else{
 						Projects.findOneAndUpdate(

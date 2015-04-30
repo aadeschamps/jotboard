@@ -41,7 +41,7 @@ server.on("connection", function(connection){
 				db.get("SELECT * FROM projects where keycode = ?", message, function(err, row){
 					console.log(row);
 					if(!row){
-						throw err('no row found');
+						connection.close();
 					}else{
 						Projects.findOneAndUpdate(
 							{project_id: row.id}, 

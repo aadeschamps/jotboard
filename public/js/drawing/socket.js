@@ -1,8 +1,8 @@
 var app = app || {}
 
 app.socket = (function(){
-	//var ws = new WebSocket("ws://jotboard.co:3000");
-	var ws = new WebSocket("ws://localhost:3000");
+	var ws = new WebSocket("ws://jotboard.co:3000");
+	//var ws = new WebSocket("ws://localhost:3000");
 
 	ws.addEventListener('open', function(){
 		ws.send(key);

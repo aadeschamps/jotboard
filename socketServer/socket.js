@@ -39,6 +39,8 @@ server.on("connection", function(connection){
 				console.log('row is: ' + row);
 				if(row === undefined){
 					console.log('error: wrong initial message');
+				}else if (err){
+					console.log(err);
 				}else{
 					// creates the project in mongo if not there, finds it if it is there
 					Projects.findOneAndUpdate(

@@ -40,6 +40,7 @@ server.on("connection", function(connection){
 				if(row === undefined){
 					console.log('error: wrong initial message');
 				}else{
+					// creates the project in mongo if not there, finds it if it is there
 					Projects.findOneAndUpdate(
 						{project_id: row.id}, 
 						{project_id: row.id}, 
@@ -48,6 +49,7 @@ server.on("connection", function(connection){
 							if(err){
 								console.log(err);
 							} else {
+								// sets user room id and starts checking to see which 'room' to put the user in
 								user.roomId = row.id;
 								checkRoom(user, row.id);
 							}
@@ -75,10 +77,12 @@ server.on("connection", function(connection){
 // one if it doesnt
 //------also sends down history of the room
 // -----added in unique id per room to each user
+// --------- for posssible later use in determining who is currently drawing
 function checkRoom(user, id){
 	if (!!local_db[id]){
 		var unique = 1;
 		var found = false;
+		// loops through users in room and determinesif there is a gap in unique ids, sets unique user id to it if finds gap
 		for (var i = 0; i < local_db[id].users.length; i++) {
 			if( local_db[id].users[i].unique != unique){
 				user.unique = unique;
@@ -88,10 +92,12 @@ function checkRoom(user, id){
 			}
 			unique++;
 		};
+		// sets the unique id to last number if not found in above loop
 		if(!found){
 			user.unique = unique
 			local_db[id].users.push(user);
 		}
+		// sends down history stored in mongo db
 		getHistory(id, function(history){
 			user.conn.send(JSON.stringify({
 				type: 'history',
@@ -100,6 +106,7 @@ function checkRoom(user, id){
 			);
 		});
 	}else{
+		// sets the first user to unique id 1, creates the room and gets the history of the project from mongo db 
 		user.unique = 1;
 		local_db[id] = {
 			users: [user],
@@ -128,6 +135,7 @@ function sendMessages(user, msg){
 			room.drawing = user.unique;
 		}
 	}
+	// makes sure this user is the one who is drawing
 	if(room.drawing === user.unique){
 		if(buffer[buffer.length-1].type === 'end'){
 			room.drawing = false;
@@ -135,6 +143,7 @@ function sendMessages(user, msg){
 		
 		buffer.unique = user.unique;	
 		var new_msg = JSON.stringify(buffer);
+		// sends down messages to everyone in room
 		room.users.forEach(function(elem){
 			elem.conn.send(new_msg);
 		});
